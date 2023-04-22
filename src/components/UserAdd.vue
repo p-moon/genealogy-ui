@@ -1,0 +1,50 @@
+<template>
+  <el-form ref="userAddForm" :model="userAddForm" label-width="120px" class="demo-dynamic">
+    <el-form-item prop="name" label="节点名称" :rules="[{required: true,message: '请输入用户名称',trigger: 'blur',}]">
+      <el-input v-model="userAddForm.name"/>
+    </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="submitForm">Submit</el-button>
+      <el-button @click="resetForm">Reset</el-button>
+    </el-form-item>
+  </el-form>
+
+</template>
+
+<script>
+import {RelationGraph} from "@/storage/RelationGraphStorge"
+
+export default {
+  name: "UserAdd",
+  data() {
+    return {
+      userAddForm: {
+        name: ""
+      }
+    };
+  },
+  methods: {
+    submitForm() {
+      let that = this
+      this.$refs["userAddForm"].validate(function(isValid, invalidFields) {
+        if (!isValid) {
+          return;
+        }
+        that.doSubmit();
+      });
+    },
+    doSubmit() {
+      let name = this.userAddForm.name;
+      RelationGraph.addGraphNode({name: name})
+      this.resetForm();
+    },
+    resetForm() {
+      this.$refs["userAddForm"].resetFields();
+    }
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
