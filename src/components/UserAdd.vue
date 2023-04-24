@@ -12,7 +12,8 @@
 </template>
 
 <script>
-import {RelationGraph} from "@/storage/RelationGraphStorge"
+import {relationGraph} from "@/storage/RelationGraphStorge"
+import Node from "@/storage/model/Node";
 
 export default {
   name: "UserAdd",
@@ -26,7 +27,7 @@ export default {
   methods: {
     submitForm() {
       let that = this
-      this.$refs["userAddForm"].validate(function(isValid, invalidFields) {
+      this.$refs["userAddForm"].validate(function (isValid, invalidFields) {
         if (!isValid) {
           return;
         }
@@ -35,7 +36,8 @@ export default {
     },
     doSubmit() {
       let name = this.userAddForm.name;
-      RelationGraph.addGraphNode({name: name})
+      let node = {id: name, text: name, borderColor: "yellow"}
+      relationGraph.addGraphNode(node)
       this.resetForm();
     },
     resetForm() {

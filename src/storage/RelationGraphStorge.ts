@@ -1,41 +1,34 @@
 import store from "../store/index";
+import Line from "@/storage/model/Line";
+import Node from "@/storage/model/Node";
+import {lineDexie} from "@/storage/dao/LineDexie";
+import {nodeDexie} from "@/storage/dao/NodeDexie";
 
-interface RelationGraphStorage {
-    getUserList(): string | null;
 
-    addGraphNode(node: { name: string }): void;
+interface IRelationGraph {
 
-    addLine(line: { from: string; to: string; text: string }): void;
+    /**
+     * 添加节点
+     */
+    addGraphNode: (node: Node) => void;
+
+    /**
+     * 添加节点关系
+     */
+    addLine: (line: Line) => void;
+
+
 }
 
-export const RelationGraph: RelationGraphStorage = {
-    getUserList: () => {
-        return window.localStorage.getItem("userList");
+export let relationGraph: IRelationGraph = {
+    addGraphNode: (node: Node) => {
+        // nodeDexie.nodes.add(node).then((res) => {});
+        store.dispatch("asyncAddNode", node).then((res) => {})
     },
-
-    addGraphNode: (node) => {
-        store.dispatch("asyncAddNode", {
-                id: node.name,
-                text: node.name,
-                borderColor: "yellow",
-            })
-            .then((res) => {
-            })
-            .catch((error) => {
-            });
-    },
-
-    addLine: (line) => {
-        store
-            .dispatch("asyncAddLine", {
-                from: line.from,
-                to: line.to,
-                text: line.text,
-                color: "#43a2f1",
-            })
-            .then((res1) => {
-            })
-            .catch((error) => {
-            });
-    },
-};
+    addLine: (line: Line) => {
+        // lineDexie.nodes.add(line);
+        store.dispatch("asyncAddLine", {
+            from: line.from, to: line.to, text: line.text, color: "#43a2f1"
+        }).then(res => {})
+    }
+}

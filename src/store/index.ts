@@ -18,7 +18,6 @@ export default createStore({
                 {from: "a", to: "b", text: "关系1", color: "#43a2f1"},
                 {from: "a", to: "c", text: "关系2"},
                 {from: "a", to: "e", text: "关系3"},
-                {from: "b", to: "e", color: "#67C23A"},
             ],
         }
     },
