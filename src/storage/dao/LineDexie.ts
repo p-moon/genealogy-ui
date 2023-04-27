@@ -1,6 +1,6 @@
 import Dexie, { Table } from 'dexie';
 
-import Line from "@/storage/model/Line";
+import { Line } from "@/storage/model/Line";
 
 
 export class LineDexie extends Dexie {

@@ -1,48 +1,79 @@
 /* eslint-disable */
-import {createStore} from "vuex";
+// @ts-ignore
+import { InjectionKey } from "vue";
+// @ts-ignore
+import { createStore, Store } from "vuex";
+import { Node } from "@/storage/model/Node";
+import { Line } from "@/storage/model/Line";
 
-export default createStore({
-    state: {
-        graph_json_data: {
-            rootId: "a",
-            nodes: [
-                // node配置选项：http://relation-graph.com/#/docs/node
-                // node支持通过插槽slot完全自定义，示例：http://relation-graph.com/#/demo/adv-slot
-                {id: "a", text: "A", borderColor: "yellow"},
-                {id: "b", text: "B", color: "#43a2f1", fontColor: "yellow"},
-                {id: "c", text: "C", nodeShape: 1, width: 80, height: 60},
-                {id: "e", text: "E", nodeShape: 0, width: 150, height: 150},
-            ],
-            lines: [
-                // link配置选项：http://relation-graph.com/#/docs/link
-                {from: "a", to: "b", text: "关系1", color: "#43a2f1"},
-                {from: "a", to: "c", text: "关系2"},
-                {from: "a", to: "e", text: "关系3"},
-            ],
-        }
+export interface RelationGraphData {
+
+  /**
+   * 跟id
+   */
+  rootId: string;
+
+  /**
+   * 节点列表
+   */
+  nodes: Node[];
+
+  /**
+   * 节点关系列表
+   */
+  lines: Line[];
+}
+
+// 为 store state 声明类型
+export interface State {
+  graph_json_data: RelationGraphData;
+}
+
+// 定义 injection key
+export const key: InjectionKey<Store<State>> = Symbol();
+
+export const store = createStore<State>({
+  state: {
+    graph_json_data: {
+      rootId: "a",
+      nodes: [
+        // node配置选项：http://relation-graph.com/#/docs/node
+        // node支持通过插槽slot完全自定义，示例：http://relation-graph.com/#/demo/adv-slot
+        { id: "a", text: "A", borderColor: "yellow" },
+        { id: "b", text: "B", color: "#43a2f1", fontColor: "yellow" },
+        { id: "c", text: "C", nodeShape: 1},
+        { id: "e", text: "E", nodeShape: 0}
+      ],
+      lines: [
+        // link配置选项：http://relation-graph.com/#/docs/link
+        { from: "a", to: "b", text: "关系1", color: "#43a2f1" },
+        { from: "a", to: "c", text: "关系2" },
+        { from: "a", to: "e", text: "关系3" }
+      ]
+    }
+  },
+  getters: {},
+  mutations: {
+    updateRootId(state: State, newRootId: string) {
+      state.graph_json_data.rootId = newRootId;
     },
-    getters: {},
-    mutations: {
-        updateRootId(state, newRootId) {
-            state.graph_json_data.rootId = newRootId;
-        },
-        addNode(state, node) {
-            state.graph_json_data.nodes.push(node)
-        },
-        addLine(state, line) {
-            state.graph_json_data.lines.push(line)
-        }
+    addNode(state: State, node: Node) {
+      state.graph_json_data.nodes.push(node);
     },
-    actions: {
-        asyncUpdateRootId({commit}, newRootId) {
-            commit('updateRootId', newRootId);
-        },
-        asyncAddNode({commit}, node) {
-            commit('addNode', node);
-        },
-        asyncAddLine({commit}, line) {
-            commit('addLine', line)
-        }
+    addLine(state: State, line: Line) {
+      state.graph_json_data.lines.push(line);
+    }
+  },
+  actions: {
+    asyncUpdateRootId({ commit }, newRootId: string) {
+      commit("updateRootId", newRootId);
     },
-    modules: {},
+    asyncAddNode({ commit }, node: Node) {
+      commit("addNode", node);
+    },
+    asyncAddLine({ commit }, line: Line) {
+      commit("addLine", line);
+    }
+  },
+  modules: {}
 });
