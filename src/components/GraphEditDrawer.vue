@@ -1,16 +1,11 @@
 <template>
-  <el-drawer v-model="drawer2" :direction="direction">
+  <el-drawer v-model="drawer" direction="rtl">
     <template #header>
       <h4>set title by slot</h4>
     </template>
     <template #default>
       <div>
-        <el-radio v-model="radio1" label="Option 1" size="large"
-        >Option 1</el-radio
-        >
-        <el-radio v-model="radio1" label="Option 2" size="large"
-        >Option 2</el-radio
-        >
+        哈哈哈
       </div>
     </template>
     <template #footer>
@@ -20,30 +15,31 @@
       </div>
     </template>
   </el-drawer>
-
-  <div>
-    <button @click="increment">{{ count }}</button>
-  </div>
 </template>
 
 <script lang="ts">
-
-import { defineComponent } from 'vue';
+import { defineComponent, ref } from 'vue'
 
 export default defineComponent({
-  name: 'Counter',
-  data() {
+  name: 'GraphEditDrawer',
+  setup() {
+    const drawer = ref<boolean>(false)
+
+    const cancelClick = () => {
+    
+    }
+    const confirmClick = () => {}
+
+    const showDrawer = () => {
+      drawer.value = true
+    }
+
     return {
-      count: 0,
-    };
+      drawer,
+      cancelClick,
+      confirmClick,
+      showDrawer,
+    }
   },
-  methods: {
-    increment() {
-      this.count++;
-    },
-    reset() {
-      this.count = 0;
-    },
-  },
-});
+})
 </script>

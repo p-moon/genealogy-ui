@@ -23,6 +23,7 @@
         <el-icon><CircleCloseFilled /></el-icon>关闭
       </el-button>
     </div>
+    <GraphEditDrawer ref="graphDrawer"></GraphEditDrawer>
   </div>
 </template>
 
@@ -33,9 +34,12 @@ import { RelationGraphData, store } from "@/store";
 import { ElNotification } from "element-plus";
 import { Node } from "@/storage/model/Node";
 import { DeleteFilled, Edit, CirclePlusFilled,CircleCloseFilled } from '@element-plus/icons-vue'
+import GraphEditDrawer from "@/components/GraphEditDrawer"
+
 
 const myPage = ref<HTMLElement>();
 const relationGraph = ref<RelationGraph>();
+const graphDrawer = ref<GraphEditDrawer>();
 relationGraph.refresh;
 const options = {
   allowSwitchLineShape: true,
@@ -95,6 +99,7 @@ let doAction = (message: string) => {
     message: message,
     offset: 100
   });
+  graphDrawer.value.showDrawer();
   isShowNodeMenuPanel.value = false;
 };
 
