@@ -1,5 +1,5 @@
 <template>
-  <el-drawer v-model="drawer" direction="rtl">
+  <el-drawer v-model="drawer" direction="rtl" size="30%">
     <template #header>
       <h4>set title by slot</h4>
     </template>
@@ -20,28 +20,28 @@
 <script lang="ts">
 import { defineComponent, ref } from "vue";
 import { ElNotification } from "element-plus";
+import { Node } from "@/storage/model/Node";
 
 export default defineComponent({
   name: 'GraphEditDrawer',
   setup() {
     const drawer = ref<boolean>(false);
-    const cancelClick = () => {
+    function cancelClick() {
       drawer.value = false
       console.log("======> call cancelClick", drawer)
     }
-    const confirmClick = () => {
+    function confirmClick():void {
       drawer.value = false
       console.log("======> call confirmClick", drawer)
     }
 
-    const showDrawer = () => {
+    function showDrawer(node: Node): void {
       drawer.value = true;
       ElNotification.success({
         title: "Success",
         message: "展示编辑页",
         offset: 100
       });
-      console.log("======> call showDrawer", drawer)
     }
 
     return {

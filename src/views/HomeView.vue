@@ -22,7 +22,7 @@
         </el-icon>
         添加
       </el-button>
-      <el-button type="danger" @click.stop="deleteNode(node)">
+      <el-button type="danger" @click.stop="deleteNode">
         <el-icon>
           <DeleteFilled />
         </el-icon>
@@ -45,56 +45,38 @@ import RelationGraph, { RGJsonData } from "relation-graph/vue3";
 import { RelationGraphData, store } from "@/store";
 import { ElNotification } from "element-plus";
 import { Node } from "@/storage/model/Node";
+import { Line } from "@/storage/model/Line";
 import { DeleteFilled, Edit, CirclePlusFilled, CircleCloseFilled } from "@element-plus/icons-vue";
 import GraphEditDrawer from "@/components/GraphEditDrawer";
 import { relationGraphStorage } from "@/storage/RelationGraphStorge";
+import relationGraphConfig from "@/config/RelationGraphConfig";
 
+watch(store.state.graph_json_data, (newVal: RelationGraphData, oldVal: RelationGraphData) => {
+  const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
+  relationGraph.value.setJsonData(graphJsonData, () => {
+    console.log("relationGraph ready!");
+  });
+}, { deep: true });
+
+onMounted(() => {
+  const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
+  relationGraph.value.setJsonData(graphJsonData, () => {
+    console.log("relationGraph ready!");
+  });
+});
 
 const myPage = ref<HTMLElement>();
 const relationGraph = ref<RelationGraph>();
 const graphDrawer = ref<InstanceType<typeof GraphEditDrawer>>();
 
-const options = {
-  allowSwitchLineShape: true,
-  allowSwitchJunctionPoint: true,
-  defaultJunctionPoint: "border",
-  allowAutoLayoutIfSupport: true,
-  backgrounImageNoRepeat: true,
-  moveToCenterWhenRefresh: true,
-  zoomToFitWhenRefresh: true,
-  useAnimationWhenRefresh: true,
-  allowShowZoomMenu: true,
-  placeSingleNode: true,
-  layouts: [
-    {
-      label: "中心",
-      layoutName: "center",
-      layoutClassName: "seeks-layout-center",
-      distance_coefficient: 1
-      // defaultJunctionPoint: 'border'
-    },
-    {
-      label: "树状",
-      layoutName: "tree",
-      layoutClassName: "seeks-layout-center",
-      // defaultJunctionPoint: 'border',
-      defaultLineShape: 4
-    },
-    {
-      label: "自动",
-      layoutName: "force",
-      layoutClassName: "seeks-layout-center",
-      defaultExpandHolderPosition: "hide"
-      // defaultJunctionPoint: 'border'
-    }
-  ]
-
-};
+const options = relationGraphConfig;
 
 const isShowNodeMenuPanel = ref(false); // 是否展示操作菜单
+let currentNode: Node; // 当前操作的节点
 const nodeMenuPanelPosition = ref({ x: 0, y: 0 }); // 操作菜单位置
 
 function onNodeClick(node: Node, $event: MouseEvent | TouchEvent) {
+  currentNode = node;
   const _base_position = myPage.value.getBoundingClientRect();
   isShowNodeMenuPanel.value = true;
   nodeMenuPanelPosition.value.x = $event.clientX - _base_position.x;
@@ -116,8 +98,20 @@ function doAction(message: string) {
   isShowNodeMenuPanel.value = false;
 }
 
-function deleteNode(node: Node) {
-  relationGraphStorage.deleteNode(node);
+function showEditorDrawer(node: Node) {
+  graphDrawer.value?.showDrawer(node);
+}
+
+function deleteNode() {
+  relationGraphStorage.deleteNode(currentNode);
+}
+
+function addNode(node: Node): Node {
+  const newNode:Node = {id: 'new node', text: 'new node', borderColor: "yellow"};
+  relationGraphStorage.addGraphNode(newNode);
+  const line:Line = {from: node.id, to: newNode.id, text: "节点关系描述"};
+  relationGraphStorage.addLine(line)
+  return node;
 }
 
 function buildShowData(graphData: RelationGraphData): RelationGraphData {
@@ -126,19 +120,6 @@ function buildShowData(graphData: RelationGraphData): RelationGraphData {
   return graphData;
 }
 
-watch(store.state.graph_json_data, (newVal: RelationGraphData, oldVal: RelationGraphData) => {
-  const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
-  relationGraph.value.setJsonData(graphJsonData, () => {
-    console.log("relationGraph ready!");
-  });
-}, { deep: true });
-
-onMounted(() => {
-  const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
-  relationGraph.value.setJsonData(graphJsonData, () => {
-    console.log("relationGraph ready!");
-  });
-});
 </script>
 <style scoped>
 .node-menu-panel {
