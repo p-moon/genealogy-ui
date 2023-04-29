@@ -5,7 +5,18 @@
     </template>
     <template #default>
       <div>
-        哈哈哈
+        <el-form
+          label-width="100px"
+          :model="currentNode"
+          style="max-width: 460px"
+        >
+          <el-form-item label="Name">
+            <el-input v-model="currentNode.id" disabled />
+          </el-form-item>
+          <el-form-item label="Activity zone">
+            <el-input v-model="currentNode.text" />
+          </el-form-item>
+        </el-form>
       </div>
     </template>
     <template #footer>
@@ -18,36 +29,37 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, Ref, ref } from "vue";
 import { ElNotification } from "element-plus";
 import { Node } from "@/storage/model/Node";
 
 export default defineComponent({
-  name: 'GraphEditDrawer',
+  name: "GraphEditDrawer",
   setup() {
     const drawer = ref<boolean>(false);
+    let currentNode = ref<Node>({ id: "", text: "" });
+
     function cancelClick() {
-      drawer.value = false
+      drawer.value = false;
     }
-    function confirmClick():void {
-      drawer.value = false
+
+    function confirmClick(): void {
+      drawer.value = false;
     }
 
     function showDrawer(node: Node): void {
       drawer.value = true;
-      ElNotification.success({
-        title: "Success",
-        message: "展示编辑页",
-        offset: 100
-      });
+      currentNode.value = node;
+      console.log("showDrawer", node);
     }
 
     return {
       drawer,
+      currentNode,
       cancelClick,
       confirmClick,
-      showDrawer,
-    }
-  },
-})
+      showDrawer
+    };
+  }
+});
 </script>

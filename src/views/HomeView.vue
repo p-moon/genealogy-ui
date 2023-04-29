@@ -53,14 +53,12 @@ import relationGraphConfig from "@/config/RelationGraphConfig";
 
 watch(store.state.graph_json_data, (newVal: RelationGraphData, oldVal: RelationGraphData) => {
   const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
-  relationGraph.value.setJsonData(graphJsonData, () => {
-    console.log("relationGraph ready!");
-  });
+  relationGraph.value?.setJsonData(graphJsonData, true);
 }, { deep: true });
 
 onMounted(() => {
   const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
-  relationGraph.value.setJsonData(graphJsonData, () => {
+  relationGraph.value?.setJsonData(graphJsonData, () => {
     console.log("relationGraph ready!");
   });
 });
@@ -77,10 +75,10 @@ const nodeMenuPanelPosition = ref({ x: 0, y: 0 }); // 操作菜单位置
 
 function onNodeClick(node: Node, $event: MouseEvent | TouchEvent) {
   currentNode = node;
-  const _base_position = myPage.value.getBoundingClientRect();
+  const _base_position = myPage.value?.getBoundingClientRect();
   isShowNodeMenuPanel.value = true;
-  nodeMenuPanelPosition.value.x = $event.clientX - _base_position.x;
-  nodeMenuPanelPosition.value.y = $event.clientY - _base_position.y;
+  nodeMenuPanelPosition.value.x = $event?.clientX - _base_position.x;
+  nodeMenuPanelPosition.value.y = $event?.clientY - _base_position.y;
   console.log("showNodeMenus:", nodeMenuPanelPosition.value, _base_position);
 }
 
@@ -88,17 +86,8 @@ function closeMenu() {
   isShowNodeMenuPanel.value = false;
 }
 
-function doAction(message: string) {
-  ElNotification.success({
-    title: "Success",
-    message: message,
-    offset: 100
-  });
-  graphDrawer.value?.showDrawer();
-  isShowNodeMenuPanel.value = false;
-}
-
 function showEditorDrawer(node: Node) {
+  isShowNodeMenuPanel.value = false;
   graphDrawer.value?.showDrawer(node);
 }
 
@@ -110,11 +99,13 @@ function addNode(): Node {
   const newNode:Node = {id: 'new-node', text: 'new-node', borderColor: "yellow"};
   relationGraphStorage.addGraphNode(newNode);
   const line:Line = {from: currentNode.id, to: newNode.id, text: "节点关系描述"};
-  relationGraphStorage.addLine(line)
+  relationGraphStorage.addLine(line); // 添加当前节点到新增子节点的关系表示
+  showEditorDrawer(newNode);
   return newNode;
 }
 
 function editNode():Node {
+  showEditorDrawer(currentNode);
   return currentNode;
 }
 

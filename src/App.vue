@@ -1,13 +1,13 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-header>
-        <HeaderMenu></HeaderMenu>
-      </el-header>
+<!--      <el-header>-->
+<!--        <HeaderMenu></HeaderMenu>-->
+<!--      </el-header>-->
       <el-container>
-        <el-aside width="200px">
-          <SideMenu></SideMenu>
-        </el-aside>
+<!--        <el-aside>-->
+<!--          <SideMenu></SideMenu>-->
+<!--        </el-aside>-->
         <el-container>
           <el-main>
             <router-view />

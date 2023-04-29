@@ -41,7 +41,7 @@ export const store = createStore<State>({
         // node支持通过插槽slot完全自定义，示例：http://relation-graph.com/#/demo/adv-slot
         { id: "a", text: "A", borderColor: "yellow" },
         { id: "b", text: "B", color: "#43a2f1", fontColor: "yellow" },
-        { id: "c", text: "C", nodeShape: 1 },
+        { id: "c", text: "C", nodeShape: 0 },
         { id: "e", text: "E", nodeShape: 0 }
       ],
       lines: [
