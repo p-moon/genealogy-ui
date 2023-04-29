@@ -18,7 +18,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
+import { ref } from '@vue/reactivity';
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: 'GraphEditDrawer',
@@ -26,7 +27,7 @@ export default defineComponent({
     const drawer = ref<boolean>(false)
 
     const cancelClick = () => {
-    
+
     }
     const confirmClick = () => {}
 

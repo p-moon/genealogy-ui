@@ -11,16 +11,28 @@
          v-bind:style="{left: nodeMenuPanelPosition.x + 'px',top: nodeMenuPanelPosition.y + 'px'}">
       <div>对这个节点进行操作：</div>
       <el-button type="primary" @click.stop="doAction('编辑')">
-        <el-icon><Edit /></el-icon>编辑
+        <el-icon>
+          <Edit />
+        </el-icon>
+        编辑
       </el-button>
       <el-button type="primary" @click.stop="doAction('添加')">
-        <el-icon><CirclePlusFilled /></el-icon>添加
+        <el-icon>
+          <CirclePlusFilled />
+        </el-icon>
+        添加
       </el-button>
-      <el-button type="danger" @click.stop="doAction('删除')">
-        <el-icon><DeleteFilled /></el-icon>删除
+      <el-button type="danger" @click.stop="deleteNode(node)">
+        <el-icon>
+          <DeleteFilled />
+        </el-icon>
+        删除
       </el-button>
       <el-button type="primary" @click.stop="closeMenu">
-        <el-icon><CircleCloseFilled /></el-icon>关闭
+        <el-icon>
+          <CircleCloseFilled />
+        </el-icon>
+        关闭
       </el-button>
     </div>
     <GraphEditDrawer ref="graphDrawer"></GraphEditDrawer>
@@ -33,14 +45,14 @@ import RelationGraph, { RGJsonData } from "relation-graph/vue3";
 import { RelationGraphData, store } from "@/store";
 import { ElNotification } from "element-plus";
 import { Node } from "@/storage/model/Node";
-import { DeleteFilled, Edit, CirclePlusFilled,CircleCloseFilled } from '@element-plus/icons-vue'
-import GraphEditDrawer from "@/components/GraphEditDrawer"
+import { DeleteFilled, Edit, CirclePlusFilled, CircleCloseFilled } from "@element-plus/icons-vue";
+import GraphEditDrawer from "@/components/GraphEditDrawer";
+import {relationGraphStorage} from "@/storage/RelationGraphStorge"
 
 
 const myPage = ref<HTMLElement>();
 const relationGraph = ref<RelationGraph>();
 const graphDrawer = ref<GraphEditDrawer>();
-relationGraph.refresh;
 const options = {
   allowSwitchLineShape: true,
   allowSwitchJunctionPoint: true,
@@ -81,7 +93,7 @@ const options = {
 const isShowNodeMenuPanel = ref(false); // 是否展示操作菜单
 const nodeMenuPanelPosition = ref({ x: 0, y: 0 }); // 操作菜单位置
 
-let onNodeClick = (node: Node, $event: MouseEvent) => {
+let onNodeClick = (node: Node, $event: MouseEvent | TouchEvent) => {
   const _base_position = myPage.value.getBoundingClientRect();
   isShowNodeMenuPanel.value = true;
   nodeMenuPanelPosition.value.x = $event.clientX - _base_position.x;
@@ -91,7 +103,7 @@ let onNodeClick = (node: Node, $event: MouseEvent) => {
 
 let closeMenu = () => {
   isShowNodeMenuPanel.value = false;
-}
+};
 
 let doAction = (message: string) => {
   ElNotification.success({
@@ -101,6 +113,10 @@ let doAction = (message: string) => {
   });
   graphDrawer.value.showDrawer();
   isShowNodeMenuPanel.value = false;
+};
+
+let deleteNode = (node: Node) => {
+  relationGraphStorage.deleteNode(node);
 };
 
 let buildShowData = (graphData: RelationGraphData): RelationGraphData => {

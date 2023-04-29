@@ -41,8 +41,8 @@ export const store = createStore<State>({
         // node支持通过插槽slot完全自定义，示例：http://relation-graph.com/#/demo/adv-slot
         { id: "a", text: "A", borderColor: "yellow" },
         { id: "b", text: "B", color: "#43a2f1", fontColor: "yellow" },
-        { id: "c", text: "C", nodeShape: 1},
-        { id: "e", text: "E", nodeShape: 0}
+        { id: "c", text: "C", nodeShape: 1 },
+        { id: "e", text: "E", nodeShape: 0 }
       ],
       lines: [
         // link配置选项：http://relation-graph.com/#/docs/link
@@ -60,9 +60,19 @@ export const store = createStore<State>({
     addNode(state: State, node: Node) {
       state.graph_json_data.nodes.push(node);
     },
+    deleteNode(state: State, deleteNode: Node) {
+      state.graph_json_data.nodes = state.graph_json_data.nodes.filter(node => {
+        return node == deleteNode;
+      });
+    },
     addLine(state: State, line: Line) {
       state.graph_json_data.lines.push(line);
-    }
+    },
+    deleteLine(state: State, deleteLine: Line) {
+      state.graph_json_data.lines = state.graph_json_data.lines.filter(line => {
+        return line == deleteLine;
+      });
+    },
   },
   actions: {
     asyncUpdateRootId({ commit }, newRootId: string) {
@@ -70,6 +80,12 @@ export const store = createStore<State>({
     },
     asyncAddNode({ commit }, node: Node) {
       commit("addNode", node);
+    },
+    asyncDeleteNode({ commit }, node: Node) {
+      commit("deleteNode", node);
+    },
+    asyncDeleteLine({ commit }, line: Line) {
+      commit("deleteLine", line);
     },
     asyncAddLine({ commit }, line: Line) {
       commit("addLine", line);

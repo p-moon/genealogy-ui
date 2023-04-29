@@ -17,10 +17,18 @@ interface IRelationGraph {
      */
     addLine: (line: Line) => void;
 
+    /**
+     * 删除节点
+     */
+    deleteNode: (node:Node) => void;
 
+    /**
+     * 删除用户关系
+     */
+    deleteLine: (line:Line) => void;
 }
 
-export let relationGraph: IRelationGraph = {
+export let relationGraphStorage: IRelationGraph = {
     addGraphNode: (node: Node) => {
         // nodeDexie.nodes.add(node).then((res) => {});
         store.dispatch("asyncAddNode", node).then(() => {})
@@ -30,5 +38,11 @@ export let relationGraph: IRelationGraph = {
         store.dispatch("asyncAddLine", {
             from: line.from, to: line.to, text: line.text, color: "#43a2f1"
         }).then(() => {})
+    },
+    deleteNode: (node:Node) => {
+        store.dispatch("asyncDeleteNode", node).then(() => {})
+    },
+    deleteLine: (line:Line) => {
+        store.dispatch("asyncDeleteLine", line).then(() => {})
     }
 }

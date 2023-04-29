@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import {relationGraph} from "@/storage/RelationGraphStorge";
+import {relationGraphStorage} from "@/storage/RelationGraphStorge";
 
 export default {
   name: "RelationAdd",
@@ -50,7 +50,7 @@ export default {
       let from = this.relationAddForm.from;
       let to = this.relationAddForm.to;
       let text = this.relationAddForm.text;
-      relationGraph.addLine({from: from, to: to, text: text})
+      relationGraphStorage.addLine({from: from, to: to, text: text})
       this.resetForm();
     },
     resetForm() {

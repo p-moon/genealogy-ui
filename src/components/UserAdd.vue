@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import {relationGraph} from "@/storage/RelationGraphStorge"
+import {relationGraphStorage} from "@/storage/RelationGraphStorge"
 import Node from "@/storage/model/Node";
 
 export default {
@@ -37,7 +37,7 @@ export default {
     doSubmit() {
       let name = this.userAddForm.name;
       let node = {id: name, text: name, borderColor: "yellow"}
-      relationGraph.addGraphNode(node)
+      relationGraphStorage.addGraphNode(node)
       this.resetForm();
     },
     resetForm() {
