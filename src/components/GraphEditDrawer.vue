@@ -28,11 +28,9 @@ export default defineComponent({
     const drawer = ref<boolean>(false);
     function cancelClick() {
       drawer.value = false
-      console.log("======> call cancelClick", drawer)
     }
     function confirmClick():void {
       drawer.value = false
-      console.log("======> call confirmClick", drawer)
     }
 
     function showDrawer(node: Node): void {

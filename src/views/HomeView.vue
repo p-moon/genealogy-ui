@@ -10,13 +10,13 @@
     <div v-if="isShowNodeMenuPanel" v-bind:class="{ 'node-menu-panel': true }"
          v-bind:style="{left: nodeMenuPanelPosition.x + 'px',top: nodeMenuPanelPosition.y + 'px'}">
       <div>对这个节点进行操作：</div>
-      <el-button type="primary" @click.stop="doAction('编辑')">
+      <el-button type="primary" @click.stop="editNode">
         <el-icon>
           <Edit />
         </el-icon>
         编辑
       </el-button>
-      <el-button type="primary" @click.stop="doAction('添加')">
+      <el-button type="primary" @click.stop="addNode">
         <el-icon>
           <CirclePlusFilled />
         </el-icon>
@@ -106,12 +106,16 @@ function deleteNode() {
   relationGraphStorage.deleteNode(currentNode);
 }
 
-function addNode(node: Node): Node {
-  const newNode:Node = {id: 'new node', text: 'new node', borderColor: "yellow"};
+function addNode(): Node {
+  const newNode:Node = {id: 'new-node', text: 'new-node', borderColor: "yellow"};
   relationGraphStorage.addGraphNode(newNode);
-  const line:Line = {from: node.id, to: newNode.id, text: "节点关系描述"};
+  const line:Line = {from: currentNode.id, to: newNode.id, text: "节点关系描述"};
   relationGraphStorage.addLine(line)
-  return node;
+  return newNode;
+}
+
+function editNode():Node {
+  return currentNode;
 }
 
 function buildShowData(graphData: RelationGraphData): RelationGraphData {
