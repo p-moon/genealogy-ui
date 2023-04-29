@@ -18,21 +18,30 @@
 </template>
 
 <script lang="ts">
-import { ref } from '@vue/reactivity';
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
+import { ElNotification } from "element-plus";
 
 export default defineComponent({
   name: 'GraphEditDrawer',
   setup() {
-    const drawer = ref<boolean>(false)
-
+    const drawer = ref<boolean>(false);
     const cancelClick = () => {
-
+      drawer.value = false
+      console.log("======> call cancelClick", drawer)
     }
-    const confirmClick = () => {}
+    const confirmClick = () => {
+      drawer.value = false
+      console.log("======> call confirmClick", drawer)
+    }
 
     const showDrawer = () => {
-      drawer.value = true
+      drawer.value = true;
+      ElNotification.success({
+        title: "Success",
+        message: "展示编辑页",
+        offset: 100
+      });
+      console.log("======> call showDrawer", drawer)
     }
 
     return {

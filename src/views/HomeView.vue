@@ -47,12 +47,13 @@ import { ElNotification } from "element-plus";
 import { Node } from "@/storage/model/Node";
 import { DeleteFilled, Edit, CirclePlusFilled, CircleCloseFilled } from "@element-plus/icons-vue";
 import GraphEditDrawer from "@/components/GraphEditDrawer";
-import {relationGraphStorage} from "@/storage/RelationGraphStorge"
+import { relationGraphStorage } from "@/storage/RelationGraphStorge";
 
 
 const myPage = ref<HTMLElement>();
 const relationGraph = ref<RelationGraph>();
-const graphDrawer = ref<GraphEditDrawer>();
+const graphDrawer = ref<InstanceType<typeof GraphEditDrawer>>();
+
 const options = {
   allowSwitchLineShape: true,
   allowSwitchJunctionPoint: true,
@@ -93,37 +94,37 @@ const options = {
 const isShowNodeMenuPanel = ref(false); // 是否展示操作菜单
 const nodeMenuPanelPosition = ref({ x: 0, y: 0 }); // 操作菜单位置
 
-let onNodeClick = (node: Node, $event: MouseEvent | TouchEvent) => {
+function onNodeClick(node: Node, $event: MouseEvent | TouchEvent) {
   const _base_position = myPage.value.getBoundingClientRect();
   isShowNodeMenuPanel.value = true;
   nodeMenuPanelPosition.value.x = $event.clientX - _base_position.x;
   nodeMenuPanelPosition.value.y = $event.clientY - _base_position.y;
   console.log("showNodeMenus:", nodeMenuPanelPosition.value, _base_position);
-};
+}
 
-let closeMenu = () => {
+function closeMenu() {
   isShowNodeMenuPanel.value = false;
-};
+}
 
-let doAction = (message: string) => {
+function doAction(message: string) {
   ElNotification.success({
     title: "Success",
     message: message,
     offset: 100
   });
-  graphDrawer.value.showDrawer();
+  graphDrawer.value?.showDrawer();
   isShowNodeMenuPanel.value = false;
-};
+}
 
-let deleteNode = (node: Node) => {
+function deleteNode(node: Node) {
   relationGraphStorage.deleteNode(node);
-};
+}
 
-let buildShowData = (graphData: RelationGraphData): RelationGraphData => {
+function buildShowData(graphData: RelationGraphData): RelationGraphData {
   graphData.nodes.forEach((node: Node) => {
   });
   return graphData;
-};
+}
 
 watch(store.state.graph_json_data, (newVal: RelationGraphData, oldVal: RelationGraphData) => {
   const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
