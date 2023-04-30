@@ -65,9 +65,10 @@ export const store = createStore<State>({
       state.graph_json_data.nodes.push(node);
     },
     deleteNode(state: State, deleteNode: Node) {
-      state.graph_json_data.nodes = state.graph_json_data.nodes.filter(node => {
-        return node.id != deleteNode.id;
-      });
+      deleteNode.isHide = true;
+      // state.graph_json_data.nodes = state.graph_json_data.nodes.filter(node => {
+      //   return node.id != deleteNode.id;
+      // });
     },
     addLine(state: State, line: Line) {
       state.graph_json_data.lines.push(line);

@@ -42,6 +42,7 @@ export let relationGraphStorage: IRelationGraph = {
         return line;
     },
     deleteNode: (node:Node) => {
+        node.isHide = true;
         store.dispatch("asyncDeleteNode", node).then(() => {})
     },
     deleteLine: (line:Line) => {
