@@ -52,7 +52,11 @@ export const store = createStore<State>({
       ]
     }
   },
-  getters: {},
+  getters: {
+    getNodeList(state: State): Node[] {
+      return state.graph_json_data.nodes;
+    },
+  },
   mutations: {
     updateRootId(state: State, newRootId: string) {
       state.graph_json_data.rootId = newRootId;

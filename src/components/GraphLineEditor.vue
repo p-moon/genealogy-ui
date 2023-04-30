@@ -2,7 +2,7 @@
   <div>
     <el-drawer v-model="drawer" direction="rtl" size="30%">
       <template #header>
-        <h4>set title by slot</h4>
+        <h4>编辑当前节点线段</h4>
       </template>
       <template #default>
         <div>
@@ -14,7 +14,7 @@
             <el-form-item label="起始节点">
               <el-select v-model="currentLine.from" class="m-2" placeholder="Select" size="large">
                 <el-option
-                  v-for="item in nodeList"
+                  v-for="item in store.state.graph_json_data.nodes"
                   :key="item.id"
                   :label="item.text"
                   :value="item.id"
@@ -24,7 +24,7 @@
             <el-form-item label="指向节点">
               <el-select v-model="currentLine.to" class="m-2" placeholder="Select" size="large">
                 <el-option
-                  v-for="item in nodeList"
+                  v-for="item in store.state.graph_json_data.nodes"
                   :key="item.id"
                   :label="item.text"
                   :value="item.id"
@@ -48,23 +48,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch, watchEffect } from "vue";
 import { Line } from "@/storage/model/Line";
-import { RelationGraphData, store } from "@/store";
+import { RelationGraphData, State, store } from "@/store";
 import { Node } from "@/storage/model/Node";
-import { mapState } from "vuex";
+import { mapGetters, mapState } from "vuex";
+import { useStore } from "vuex";
+import { RGJsonData } from "relation-graph/vue3";
+import { RGLink } from "relation-graph/vue3/RelationGraph";
 
 export default defineComponent({
   name: "GraphLineEditor",
-  computed: {
-    ...mapState({
-      nodeList: state => state.graph_json_data.nodes
-    })
+  ...mapGetters({
+    nodeList: "getNodeList",
+  }),
 
-  },
   setup() {
+    const store = useStore<State>();
+    // const nodeList = computed<Node[]>(() => store.state.graph_json_data.nodes);
     const drawer = ref<boolean>(false);
+    const fromNode = ref<Node>();
+    const toNode = ref<Node>();
     let currentLine = ref<Line>({from: "", to: "", text: "节点关系描述"});
+
     function cancelClick() {
       drawer.value = false;
     }
@@ -73,18 +79,18 @@ export default defineComponent({
       drawer.value = false;
     }
 
-    function showLineEditor(Line: Line): void {
+    function showLineEditor(line: Line, link:RGLink): void {
       drawer.value = true;
-      currentLine.value = Line;
-      console.log("showDrawer", Line);
+      currentLine.value = line;
     }
 
     return {
       drawer,
+      store,
       currentLine,
       cancelClick,
       confirmClick,
-      showLineEditor
+      showLineEditor,
     };
   }
 });

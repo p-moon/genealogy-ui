@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="myPage" style="border: #efefef solid 1px; height: calc(100vh - 100px);width: 100%;">
+    <div ref="myPage" class="page-content" @click="closeMenu">
       <RelationGraph ref="relationGraph" :options="options" :onNodeClick="onNodeClick" :onLineClick="onLineClick">
         <template #node="{node}">
           <div style="padding-top: 20px">{{ node.text }}</div>
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, methods, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import RelationGraph, { RGJsonData } from "relation-graph/vue3";
 import { RelationGraphData, store } from "@/store";
 import { Node } from "@/storage/model/Node";
@@ -86,7 +86,7 @@ function onNodeClick(node: Node, $event: MouseEvent | TouchEvent):boolean {
 }
 
 function onLineClick(line: RGLine, link: RGLink, e: MouseEvent | TouchEvent):boolean {
-  graphLineEditor.value?.showLineEditor(line)
+  graphLineEditor.value?.showLineEditor(line, link);
   return true;
 }
 
@@ -133,5 +133,10 @@ function buildShowData(graphData: RelationGraphData): RelationGraphData {
     position: absolute;
     z-index: 999;
 }
-
+.page-content {
+    margin-right: 300px;
+    border: #efefef solid 1px;
+    height: calc(100vh - 100px);
+    width: 100%;
+}
 </style>
