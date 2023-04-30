@@ -9,11 +9,17 @@
       </el-icon>
       编辑
     </el-button>
-    <el-button type="primary" @click.stop="addNode">
+    <el-button type="primary" @click.stop="addChildNode">
       <el-icon>
         <CirclePlusFilled />
       </el-icon>
-      添加
+      添加子节点
+    </el-button>
+    <el-button type="primary" @click.stop="addParentNode">
+      <el-icon>
+        <CirclePlusFilled />
+      </el-icon>
+      添加父节点
     </el-button>
     <el-button type="danger" @click.stop="deleteNode">
       <el-icon>
@@ -58,12 +64,22 @@ export default defineComponent({
       relationGraphStorage.deleteNode(currentNode);
     }
 
-    function addNode(): Node {
+    function addChildNode(): Node {
       const newNode: Node = { id: "new-node", text: "new-node", borderColor: "yellow" };
       relationGraphStorage.addGraphNode(newNode);
       const line: Line = { from: currentNode.id, to: newNode.id, text: "节点关系描述" };
       relationGraphStorage.addLine(line); // 添加当前节点到新增子节点的关系表示
       // showEditorDrawer(newNode);
+      hideNodeProfile();
+      return newNode;
+    }
+    function addParentNode(): Node {
+      const newNode: Node = { id: "new-node", text: "new-node", borderColor: "yellow" };
+      relationGraphStorage.addGraphNode(newNode);
+      const line: Line = { from: newNode.id, to: currentNode.id, text: "节点关系描述" };
+      relationGraphStorage.addLine(line); // 添加当前节点到新增子节点的关系表示
+      // showEditorDrawer(newNode);
+      hideNodeProfile();
       return newNode;
     }
 
@@ -85,7 +101,8 @@ export default defineComponent({
       isShowNodeMenuPanel,
       graphNodeEditor,
       deleteNode,
-      addNode,
+      addChildNode,
+      addParentNode,
       editNode,
       hideNodeProfile,
       showNodeProfile,
