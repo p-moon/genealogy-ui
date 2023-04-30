@@ -34,6 +34,57 @@
             <el-form-item label="名称">
               <el-input v-model="currentLine.text" />
             </el-form-item>
+            <el-form-item label="线条粗细">
+              <el-slider v-model="currentLine.lineWidth" :step="1" :max="100"/>
+            </el-form-item>
+            <el-form-item label="线条颜色">
+              <el-color-picker v-model="currentLine.color" size="large" />
+            </el-form-item>
+            <el-form-item label="线条文字颜色">
+              <el-color-picker v-model="currentLine.fontColor" size="large" />
+            </el-form-item>
+            <el-form-item label="是否隐藏箭头">
+              <el-switch
+                v-model="currentLine.isHideArrow"
+                inline-prompt
+                active-text="隐藏"
+                inactive-text="不隐藏"
+              />
+            </el-form-item>
+            <el-form-item label="是否显示起始箭头" v-if="!currentLine.isHideArrow">
+              <el-switch
+                v-model="currentLine.showStartArrow"
+                inline-prompt
+                active-text="显示"
+                inactive-text="不显示"
+              />
+            </el-form-item>
+            <el-form-item label="是否显示结束箭头" v-if="!currentLine.isHideArrow">
+              <el-switch
+                v-model="currentLine.showEndArrow"
+                inline-prompt
+                active-text="显示"
+                inactive-text="不显示"
+              />
+            </el-form-item>
+            <el-form-item label="文字是否沿着连线走">
+              <el-switch
+                v-model="currentLine.useTextPath"
+                inline-prompt
+                active-text="沿着连线走"
+                inactive-text="不沿着连线走"
+              />
+            </el-form-item>
+            <el-form-item label="线条形状">
+              <el-select v-model="currentLine.lineShape" class="m-2" placeholder="Select" size="large">
+                <el-option
+                  v-for="item in [{label:'直线', value:1}, {label:'简洁', value:2},{label:'生动', value:3},{label:'折线', value:4},{label:'折线2', value:5},{label:'折线3', value:6}]"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
           </el-form>
         </div>
       </template>
