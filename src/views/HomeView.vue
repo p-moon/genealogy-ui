@@ -1,7 +1,7 @@
 <template>
   <div>
     <div ref="myPage" style="border: #efefef solid 1px; height: calc(100vh - 100px);width: 100%;">
-      <RelationGraph ref="relationGraph" :options="options" :onNodeClick="onNodeClick">
+      <RelationGraph ref="relationGraph" :options="options" :onNodeClick="onNodeClick" :onLineClick="onLineClick">
         <template #node="{node}">
           <div style="padding-top: 20px">{{ node.text }}</div>
         </template>
@@ -35,7 +35,8 @@
         关闭
       </el-button>
     </div>
-    <GraphEditDrawer ref="graphDrawer"></GraphEditDrawer>
+    <GraphNodeEditor ref="graphNodeEditor"></GraphNodeEditor>
+    <GraphLineEditor ref="graphLineEditor"></GraphLineEditor>
   </div>
 </template>
 
@@ -43,13 +44,14 @@
 import { onMounted, ref, methods, watch } from "vue";
 import RelationGraph, { RGJsonData } from "relation-graph/vue3";
 import { RelationGraphData, store } from "@/store";
-import { ElNotification } from "element-plus";
 import { Node } from "@/storage/model/Node";
 import { Line } from "@/storage/model/Line";
 import { DeleteFilled, Edit, CirclePlusFilled, CircleCloseFilled } from "@element-plus/icons-vue";
-import GraphEditDrawer from "@/components/GraphEditDrawer";
 import { relationGraphStorage } from "@/storage/RelationGraphStorge";
 import relationGraphConfig from "@/config/RelationGraphConfig";
+import GraphNodeEditor from "@/components/GraphNodeEditor.vue";
+import GraphLineEditor from "@/components/GraphLineEditor.vue";
+import { RGLine, RGLink } from "relation-graph/vue3/RelationGraph";
 
 watch(store.state.graph_json_data, (newVal: RelationGraphData, oldVal: RelationGraphData) => {
   const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
@@ -65,7 +67,8 @@ onMounted(() => {
 
 const myPage = ref<HTMLElement>();
 const relationGraph = ref<RelationGraph>();
-const graphDrawer = ref<InstanceType<typeof GraphEditDrawer>>();
+const graphNodeEditor = ref<InstanceType<typeof GraphNodeEditor>>();
+const graphLineEditor = ref<InstanceType<typeof GraphLineEditor>>();
 
 const options = relationGraphConfig;
 
@@ -73,13 +76,18 @@ const isShowNodeMenuPanel = ref(false); // 是否展示操作菜单
 let currentNode: Node; // 当前操作的节点
 const nodeMenuPanelPosition = ref({ x: 0, y: 0 }); // 操作菜单位置
 
-function onNodeClick(node: Node, $event: MouseEvent | TouchEvent) {
+function onNodeClick(node: Node, $event: MouseEvent | TouchEvent):boolean {
   currentNode = node;
   const _base_position = myPage.value?.getBoundingClientRect();
   isShowNodeMenuPanel.value = true;
   nodeMenuPanelPosition.value.x = $event?.clientX - _base_position.x;
   nodeMenuPanelPosition.value.y = $event?.clientY - _base_position.y;
-  console.log("showNodeMenus:", nodeMenuPanelPosition.value, _base_position);
+  return true;
+}
+
+function onLineClick(line: RGLine, link: RGLink, e: MouseEvent | TouchEvent):boolean {
+  graphLineEditor.value?.showLineEditor(line)
+  return true;
 }
 
 function closeMenu() {
@@ -88,7 +96,7 @@ function closeMenu() {
 
 function showEditorDrawer(node: Node) {
   isShowNodeMenuPanel.value = false;
-  graphDrawer.value?.showDrawer(node);
+  graphNodeEditor.value?.showNodeEditor(node);
 }
 
 function deleteNode() {
@@ -100,7 +108,7 @@ function addNode(): Node {
   relationGraphStorage.addGraphNode(newNode);
   const line:Line = {from: currentNode.id, to: newNode.id, text: "节点关系描述"};
   relationGraphStorage.addLine(line); // 添加当前节点到新增子节点的关系表示
-  showEditorDrawer(newNode);
+  // showEditorDrawer(newNode);
   return newNode;
 }
 
