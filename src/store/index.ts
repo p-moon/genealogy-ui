@@ -78,6 +78,9 @@ export const store = createStore<State>({
         return line == deleteLine;
       });
     },
+    updateGraphData(state:State, graph_json_data:RelationGraphData) {
+      state.graph_json_data = graph_json_data
+    },
   },
   actions: {
     asyncUpdateRootId({ commit }, newRootId: string) {
@@ -94,6 +97,9 @@ export const store = createStore<State>({
     },
     asyncAddLine({ commit }, line: Line) {
       commit("addLine", line);
+    },
+    asyncUpdateGraphData:({commit}, line:Line) =>{
+      commit("updateGraphData", line);
     }
   },
   modules: {}

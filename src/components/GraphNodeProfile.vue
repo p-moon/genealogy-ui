@@ -36,7 +36,7 @@ import { Line } from "@/storage/model/Line";
 import { RelationGraphData, State, store } from "@/store";
 import { Node } from "@/storage/model/Node";
 import { CircleCloseFilled, CirclePlusFilled, DeleteFilled, Edit } from "@element-plus/icons-vue";
-import { relationGraphStorage } from "@/storage/RelationGraphStorge";
+import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 import GraphNodeEditor from "@/components/GraphNodeEditor.vue";
 
 export default defineComponent({
@@ -61,23 +61,23 @@ export default defineComponent({
     }
 
     function deleteNode() {
-      relationGraphStorage.deleteNode(currentNode);
+      relationGraphDelegate.deleteNode(currentNode);
     }
 
     function addChildNode(): Node {
       const newNode: Node = { id: "new-node", text: "new-node", borderColor: "yellow" };
-      relationGraphStorage.addGraphNode(newNode);
+      relationGraphDelegate.addGraphNode(newNode);
       const line: Line = { from: currentNode.id, to: newNode.id, text: "节点关系描述" };
-      relationGraphStorage.addLine(line); // 添加当前节点到新增子节点的关系表示
+      relationGraphDelegate.addLine(line); // 添加当前节点到新增子节点的关系表示
       // showEditorDrawer(newNode);
       hideNodeProfile();
       return newNode;
     }
     function addParentNode(): Node {
       const newNode: Node = { id: "new-node", text: "new-node", borderColor: "yellow" };
-      relationGraphStorage.addGraphNode(newNode);
+      relationGraphDelegate.addGraphNode(newNode);
       const line: Line = { from: newNode.id, to: currentNode.id, text: "节点关系描述" };
-      relationGraphStorage.addLine(line); // 添加当前节点到新增子节点的关系表示
+      relationGraphDelegate.addLine(line); // 添加当前节点到新增子节点的关系表示
       // showEditorDrawer(newNode);
       hideNodeProfile();
       return newNode;
@@ -105,7 +105,7 @@ export default defineComponent({
       addParentNode,
       editNode,
       hideNodeProfile,
-      showNodeProfile,
+      showNodeProfile
     };
   },
 });
