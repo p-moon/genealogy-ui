@@ -99,13 +99,10 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref, watch, watchEffect } from "vue";
+import {defineComponent, ref, watch } from "vue";
 import { Line } from "@/storage/model/Line";
-import { RelationGraphData, State, store } from "@/store";
-import { Node } from "@/storage/model/Node";
-import { mapGetters, mapState } from "vuex";
-import { useStore } from "vuex";
-import { RGJsonData } from "relation-graph/vue3";
+import {store } from "@/store";
+import { mapGetters } from "vuex";
 import { RGLink } from "relation-graph/vue3/RelationGraph";
 
 export default defineComponent({
@@ -114,7 +111,6 @@ export default defineComponent({
     nodeList: "getNodeList",
   }),
   setup() {
-    const store = useStore<State>();
     // const nodeList = computed<Node[]>(() => store.state.graph_json_data.nodes);
     const drawer = ref<boolean>(false);
     let currentLine = ref<Line>({from: "", to: "", text: "节点关系描述"});

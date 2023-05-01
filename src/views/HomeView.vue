@@ -23,19 +23,6 @@ import GraphNodeInfo from "@/components/GraphNodeInfo.vue";
 import GraphLineEditor from "@/components/GraphLineEditor.vue";
 import { RGLine, RGLink } from "relation-graph/vue3/RelationGraph";
 
-watch(store.state.graph_json_data, (newVal: RelationGraphData, oldVal: RelationGraphData) => {
-  const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
-  relationGraph.value?.setJsonData(graphJsonData, true);
-  relationGraph.value?.updateView();
-}, { deep: true });
-
-onMounted(() => {
-  const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
-  relationGraph.value?.setJsonData(graphJsonData, () => {
-    console.log("relationGraph ready!");
-  });
-});
-
 const myPage = ref<HTMLElement>();
 const relationGraph = ref<RelationGraph>();
 const graphLineEditor = ref<InstanceType<typeof GraphLineEditor>>();
@@ -43,15 +30,13 @@ const graphNodeProfile = ref<InstanceType<typeof graphNodeProfile>>();
 
 const options = relationGraphConfig;
 
-let currentNode: Node; // 当前操作的节点
 const nodeMenuPanelPosition = ref({ x: 0, y: 0 }); // 操作菜单位置
 
 function onNodeClick(node: Node, $event: MouseEvent | TouchEvent):boolean {
-  currentNode = node;
   const _base_position = myPage.value?.getBoundingClientRect();
   let x = $event?.clientX - _base_position.x;
   let y = $event?.clientY - _base_position.y;
-  graphNodeProfile.value?.showNodeProfile(currentNode, x, y);
+  graphNodeProfile.value?.showNodeProfile(node, x, y);
   return true;
 }
 
@@ -69,6 +54,25 @@ function buildShowData(graphData: RelationGraphData): RelationGraphData {
   });
   return graphData;
 }
+
+watch(store.state.graph_json_data, (newVal: RelationGraphData, oldVal: RelationGraphData) => {
+  const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
+  relationGraph.value?.setJsonData(graphJsonData, true);
+  relationGraph.value?.updateView();
+}, { deep: true });
+
+
+onMounted(() => {
+  const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
+  relationGraph.value?.setJsonData(graphJsonData, () => {
+    console.log("relationGraph ready!");
+  });
+});
+
+window.setInterval(() => {
+  console.log("save graph_data to store")
+  store.state.graph_json_data = relationGraph.value?.getInstance().getGraphJsonData();
+}, 3000);
 
 </script>
 <style scoped>
