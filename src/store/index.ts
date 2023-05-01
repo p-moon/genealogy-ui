@@ -65,7 +65,7 @@ export const store = createStore<State>({
       state.graph_json_data.nodes.push(node);
     },
     deleteNode(state: State, deleteNode: Node) {
-      deleteNode.isHide = true;
+      deleteNode.isHide
       // state.graph_json_data.nodes = state.graph_json_data.nodes.filter(node => {
       //   return node.id != deleteNode.id;
       // });

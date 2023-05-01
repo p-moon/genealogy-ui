@@ -113,13 +113,10 @@ export default defineComponent({
   ...mapGetters({
     nodeList: "getNodeList",
   }),
-
   setup() {
     const store = useStore<State>();
     // const nodeList = computed<Node[]>(() => store.state.graph_json_data.nodes);
     const drawer = ref<boolean>(false);
-    const fromNode = ref<Node>();
-    const toNode = ref<Node>();
     let currentLine = ref<Line>({from: "", to: "", text: "节点关系描述"});
 
     function cancelClick() {

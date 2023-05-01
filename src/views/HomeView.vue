@@ -3,7 +3,7 @@
     <div ref="myPage" class="page-content" @click="closeMenu">
       <RelationGraph ref="relationGraph" :options="options" :onNodeClick="onNodeClick" :onLineClick="onLineClick">
         <template #node="{node}">
-          <div style="padding-top: 20px">{{ node.text }}</div>
+          <GraphNodeInfo :node="node"></GraphNodeInfo>
         </template>
       </RelationGraph>
     </div>
@@ -19,12 +19,14 @@ import { RelationGraphData, store } from "@/store";
 import { Node } from "@/storage/model/Node";
 import relationGraphConfig from "@/config/RelationGraphConfig";
 import GraphNodeProfile from "@/components/GraphNodeProfile.vue";
+import GraphNodeInfo from "@/components/GraphNodeInfo.vue";
 import GraphLineEditor from "@/components/GraphLineEditor.vue";
 import { RGLine, RGLink } from "relation-graph/vue3/RelationGraph";
 
 watch(store.state.graph_json_data, (newVal: RelationGraphData, oldVal: RelationGraphData) => {
   const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
   relationGraph.value?.setJsonData(graphJsonData, true);
+  relationGraph.value?.updateView();
 }, { deep: true });
 
 onMounted(() => {
