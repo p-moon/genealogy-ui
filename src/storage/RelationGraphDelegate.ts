@@ -38,6 +38,16 @@ interface IRelationGraph {
    * 保存绘图数据
    */
   saveRelationGraph: () => void;
+
+  /**
+   * 刷新重绘
+   */
+  refresh:() => void;
+
+  /**
+   * 将节点更新为选中状态
+   */
+  focusNodeById: (id:string) => void;
 }
 
 let relationGraphView: Ref<RelationGraph | undefined>;
@@ -47,6 +57,7 @@ export let relationGraphDelegate: IRelationGraph = {
     store.dispatch("asyncAddNode", node).then(() => {
       relationGraphView?.value?.getInstance()?.addNodes([node]);
       relationGraphView?.value?.getInstance()?.refresh();
+      relationGraphView?.value?.getInstance()?.focusNodeById(node.id);
     });
     return node;
   },
@@ -68,7 +79,7 @@ export let relationGraphDelegate: IRelationGraph = {
   },
   deleteLine: (line: Line) => {
     store.dispatch("asyncDeleteLine", line).then(() => {
-      // relationGraphView?.value?.getInstance()?.removeLinkById(line.from, line.to);
+      relationGraphView?.value?.getInstance()?.removeLinkById(line.from, line.to);
     });
   },
   setRelationGraphView: (relationGraph: Ref<RelationGraph | undefined>) => {
@@ -76,7 +87,7 @@ export let relationGraphDelegate: IRelationGraph = {
   },
   saveRelationGraph: () => {
     let graphJsonData = relationGraphView.value?.getInstance().getGraphJsonData();
-    if (!("lines" in graphJsonData && "nodes" in graphJsonData && "rootId" in graphJsonData)) {
+    if (!(graphJsonData && "lines" in graphJsonData && "nodes" in graphJsonData && "rootId" in graphJsonData)) {
       console.log("saveRelationGraph => invalid graphJsonData", graphJsonData);
       return;
     }
@@ -84,5 +95,12 @@ export let relationGraphDelegate: IRelationGraph = {
     store.dispatch("asyncUpdateGraphData", graphJsonData).then(r => {
 
     });
+  },
+  refresh:() => {
+    relationGraphView.value?.getInstance().dataUpdated();
+    relationGraphView.value?.getInstance().refresh();
+  },
+  focusNodeById: (id:string) => {
+    relationGraphView.value?.getInstance().focusNodeById(id);
   }
 };

@@ -44,6 +44,7 @@ export default defineComponent({
   components: { GraphNodeEditor, Edit, CircleCloseFilled, DeleteFilled, CirclePlusFilled },
 
   setup() {
+    const nodeNameCount = ref(0); // 新建节点名称计数，用于生成node1、node2、...
     const isShowNodeMenuPanel = ref(false); // 是否展示操作菜单
     let currentNode: Node = { id: "", text: "" }; // 当前操作的节点
     const nodeMenuPanelPosition = ref({ x: 0, y: 0 }); // 操作菜单位置
@@ -69,7 +70,7 @@ export default defineComponent({
     }
 
     function addChildNode(): Node {
-      const newNode: Node = { id: "new-node", text: "new-node"};
+      const newNode: Node = { id: "new-node", text: "节点-" + nodeNameCount.value ++};
       relationGraphDelegate.addGraphNode(newNode);
       const line: Line = { from: currentNode.id, to: newNode.id, text: "节点关系描述" };
       relationGraphDelegate.addLine(line); // 添加当前节点到新增子节点的关系表示

@@ -15,10 +15,6 @@ export default defineComponent({
   name: "RelationGraphMenu",
   components: {},
   props: {
-    node: {
-      type: Object as () => Node,
-      required: true
-    }
   },
   setup() {
     const searchText = ref("");

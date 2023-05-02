@@ -5,9 +5,9 @@
         <template #node="{node}" v-slot="node">
           <GraphNodeInfo :node="node"></GraphNodeInfo>
         </template>
-        <template #graphPlug>
-          <RelationGraphMenu :node="node"></RelationGraphMenu>
-        </template>
+<!--        <template #miniToolBar v-slot="miniToolBar">-->
+<!--          <GraphMiniToolBar />-->
+<!--        </template>-->
       </RelationGraph>
     </div>
     <GraphNodeProfile ref="graphNodeProfile"></GraphNodeProfile>

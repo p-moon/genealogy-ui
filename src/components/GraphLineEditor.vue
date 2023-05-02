@@ -12,7 +12,7 @@
             style="max-width: 460px"
           >
             <el-form-item label="起始节点">
-              <el-select v-model="currentLine.from" class="m-2" placeholder="Select" size="large">
+              <el-select v-model="currentLine.from" class="m-2" placeholder="Select" size="large" @change="onLinePointChange" disabled>
                 <el-option
                   v-for="item in store.state.graph_json_data.nodes"
                   :key="item.id"
@@ -22,7 +22,7 @@
               </el-select>
             </el-form-item>
             <el-form-item label="指向节点">
-              <el-select v-model="currentLine.to" class="m-2" placeholder="Select" size="large">
+              <el-select v-model="currentLine.to" class="m-2" placeholder="Select" size="large" @change="onLinePointChange" disabled>
                 <el-option
                   v-for="item in store.state.graph_json_data.nodes"
                   :key="item.id"
@@ -103,6 +103,7 @@ import {defineComponent, ref, watch } from "vue";
 import { Line } from "@/storage/model/Line";
 import {store } from "@/store";
 import { mapGetters } from "vuex";
+import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 import { RGLink } from "relation-graph/vue3/RelationGraph";
 
 export default defineComponent({
@@ -114,6 +115,11 @@ export default defineComponent({
     // const nodeList = computed<Node[]>(() => store.state.graph_json_data.nodes);
     const drawer = ref<boolean>(false);
     let currentLine = ref<Line>({from: "", to: "", text: "节点关系描述"});
+
+    function onLinePointChange(id:string) {
+      relationGraphDelegate.refresh();
+      console.log("line point changeed");
+    }
 
     function cancelClick() {
       drawer.value = false;
@@ -135,6 +141,7 @@ export default defineComponent({
       cancelClick,
       confirmClick,
       showLineEditor,
+      onLinePointChange,
     };
   }
 });
