@@ -57,7 +57,7 @@ export let relationGraphDelegate: IRelationGraph = {
     store.dispatch("asyncAddNode", node).then(() => {
       relationGraphView?.value?.getInstance()?.addNodes([node]);
       relationGraphView?.value?.getInstance()?.refresh();
-      relationGraphView?.value?.getInstance()?.focusNodeById(node.id);
+      // relationGraphView?.value?.getInstance()?.focusNodeById(node.id);
     });
     return node;
   },

@@ -9,18 +9,25 @@
       </el-icon>
       编辑
     </el-button>
-    <el-button type="primary" @click.stop="addChildNode">
-      <el-icon>
-        <CirclePlusFilled />
-      </el-icon>
+    &nbsp;
+    <el-dropdown size="default" split-button type="primary" @click.stop="addChildNode">
       添加子节点
-    </el-button>
-    <el-button type="primary" @click.stop="addParentNode">
-      <el-icon>
-        <CirclePlusFilled />
-      </el-icon>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item v-for="node in store.state.graph_json_data.nodes" @click.stop="addLine(currentNode, node)">{{node.text}}</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+    &nbsp;
+    <el-dropdown size="default" split-button type="primary" @click.stop="addParentNode">
       添加父节点
-    </el-button>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item v-for="node in store.state.graph_json_data.nodes" @click.stop="addLine(node, currentNode)">{{node.text}}</el-dropdown-item>
+        </el-dropdown-menu>
+      </template>
+    </el-dropdown>
+    &nbsp;
     <el-button type="danger" @click.stop="deleteNode">
       <el-icon>
         <DeleteFilled />
@@ -38,6 +45,7 @@ import { Node } from "@/storage/model/Node";
 import { CircleCloseFilled, CirclePlusFilled, DeleteFilled, Edit } from "@element-plus/icons-vue";
 import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 import GraphNodeEditor from "@/components/GraphNodeEditor.vue";
+import { Ref } from "vue-property-decorator";
 
 export default defineComponent({
   name: "GraphNodeProfile",
@@ -46,7 +54,7 @@ export default defineComponent({
   setup() {
     const nodeNameCount = ref(0); // 新建节点名称计数，用于生成node1、node2、...
     const isShowNodeMenuPanel = ref(false); // 是否展示操作菜单
-    let currentNode: Node = { id: "", text: "" }; // 当前操作的节点
+    let currentNode = ref<Node>({ id: "", text: "" }); // 当前操作的节点
     const nodeMenuPanelPosition = ref({ x: 0, y: 0 }); // 操作菜单位置
     let graphNodeEditor = ref<InstanceType<typeof GraphNodeEditor>>();
 
@@ -58,7 +66,7 @@ export default defineComponent({
       isShowNodeMenuPanel.value = true;
       nodeMenuPanelPosition.value.x = x;
       nodeMenuPanelPosition.value.y = y;
-      currentNode = node;
+      currentNode.value = node;
     }
 
     function hideNodeProfile() {
@@ -66,31 +74,32 @@ export default defineComponent({
     }
 
     function deleteNode() {
-      relationGraphDelegate.deleteNode(currentNode);
+      relationGraphDelegate.deleteNode(currentNode.value);
+    }
+
+    function addLine(from:Node, to:Node) {
+      const line: Line = { from: from.id, to: to.id, text: "节点关系描述" };
+      relationGraphDelegate.addLine(line); // 添加当前节点到新增子节点的关系表示
+      hideNodeProfile();
     }
 
     function addChildNode(): Node {
       const newNode: Node = { id: "new-node", text: "节点-" + nodeNameCount.value ++};
       relationGraphDelegate.addGraphNode(newNode);
-      const line: Line = { from: currentNode.id, to: newNode.id, text: "节点关系描述" };
-      relationGraphDelegate.addLine(line); // 添加当前节点到新增子节点的关系表示
+      addLine(currentNode.value, newNode);
       // showEditorDrawer(newNode);
-      hideNodeProfile();
       return newNode;
     }
     function addParentNode(): Node {
-      const newNode: Node = { id: "new-node", text: "new-node", nodeShape:0};
+      const newNode: Node = { id: "new-node", text: "节点-" + nodeNameCount.value ++, nodeShape:0};
       relationGraphDelegate.addGraphNode(newNode);
-      const line: Line = { from: newNode.id, to: currentNode.id, text: "节点关系描述" };
-      relationGraphDelegate.addLine(line); // 添加当前节点到新增子节点的关系表示
-      // showEditorDrawer(newNode);
-      hideNodeProfile();
+      addLine(newNode, currentNode.value);
       return newNode;
     }
 
     function editNode(): Node {
-      showEditorDrawer(currentNode);
-      return currentNode;
+      showEditorDrawer(currentNode.value);
+      return currentNode.value;
     }
 
     function showEditorDrawer(node: Node) {
@@ -111,6 +120,7 @@ export default defineComponent({
       editNode,
       hideNodeProfile,
       showNodeProfile,
+      addLine,
       modifyPanelPosition,
     };
   },
