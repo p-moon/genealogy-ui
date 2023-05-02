@@ -27,6 +27,7 @@ const forceLayout: RGLayoutOptionsCore = {
 const relationGraphConfig: RGOptions = {
   allowSwitchLineShape: true,
   allowSwitchJunctionPoint: true,
+  defaultJunctionPoint: 'border',
   // defaultJunctionPoint: 'border',
   allowAutoLayoutIfSupport: true,
   backgrounImageNoRepeat: true,

@@ -1,6 +1,7 @@
 <template>
   <div>
-    {{ node.text }}
+<!--    <el-avatar shape="square" :size="50" src="/img/icons/WechatIMG12780.jpeg" />-->
+    <img src="/img/icons/WechatIMG12780.jpeg" alt="sss" style="width: 60px;height: 60px">
   </div>
 </template>
 

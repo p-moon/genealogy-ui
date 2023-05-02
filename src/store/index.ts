@@ -39,23 +39,25 @@ export const store = createStore<State>({
       nodes: [
         // node配置选项：http://relation-graph.com/#/docs/node
         // node支持通过插槽slot完全自定义，示例：http://relation-graph.com/#/demo/adv-slot
-        { id: "a", text: "A", borderColor: "yellow"},
-        { id: "b", text: "B", color: "#43a2f1", fontColor: "yellow" },
-        { id: "c", text: "C", nodeShape: 0 },
-        { id: "e", text: "E", nodeShape: 0 }
+        {
+          id: "a",
+          text: "A",
+          borderColor: "rgba(0, 0, 0, 0)",
+          color: "rgba(0, 0, 0, 0)",
+          nodeShape: 1,
+          // width: 1,
+          // height: 1
+        },
       ],
       lines: [
         // link配置选项：http://relation-graph.com/#/docs/link
-        { from: "a", to: "b", text: "关系1", color: "#43a2f1" },
-        { from: "a", to: "c", text: "关系2" },
-        { from: "a", to: "e", text: "关系3" }
       ]
     }
   },
   getters: {
     getNodeList(state: State): Node[] {
       return state.graph_json_data.nodes;
-    },
+    }
   },
   mutations: {
     updateRootId(state: State, newRootId: string) {
@@ -65,7 +67,7 @@ export const store = createStore<State>({
       state.graph_json_data.nodes.push(node);
     },
     deleteNode(state: State, deleteNode: Node) {
-      deleteNode.isHide
+      deleteNode.isHide;
       // state.graph_json_data.nodes = state.graph_json_data.nodes.filter(node => {
       //   return node.id != deleteNode.id;
       // });
@@ -78,9 +80,9 @@ export const store = createStore<State>({
         return line == deleteLine;
       });
     },
-    updateGraphData(state:State, graph_json_data:RelationGraphData) {
-      state.graph_json_data = graph_json_data
-    },
+    updateGraphData(state: State, graph_json_data: RelationGraphData) {
+      state.graph_json_data = graph_json_data;
+    }
   },
   actions: {
     asyncUpdateRootId({ commit }, newRootId: string) {
@@ -98,7 +100,7 @@ export const store = createStore<State>({
     asyncAddLine({ commit }, line: Line) {
       commit("addLine", line);
     },
-    asyncUpdateGraphData:({commit}, line:Line) =>{
+    asyncUpdateGraphData: ({ commit }, line: Line) => {
       commit("updateGraphData", line);
     }
   },

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div ref="myPage" class="page-content" @click="closeMenu">
+    <div ref="myPage" class="page-content" @click="closeMenu" @mousemove="handleMouseMove">
       <RelationGraph ref="relationGraph" :options="options" :onNodeClick="onNodeClick" :onLineClick="onLineClick">
-        <template #node="{node}">
+        <template #node="{node}" v-slot="node">
           <GraphNodeInfo :node="node"></GraphNodeInfo>
         </template>
       </RelationGraph>
@@ -27,13 +27,14 @@ import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 const myPage = ref<HTMLElement>();
 const relationGraph = ref<RelationGraph>();
 const graphLineEditor = ref<InstanceType<typeof GraphLineEditor>>();
-const graphNodeProfile = ref<InstanceType<typeof graphNodeProfile>>();
+const graphNodeProfile = ref<InstanceType<typeof GraphNodeProfile>>();
 
 const options = relationGraphConfig;
 
-const nodeMenuPanelPosition = ref({ x: 0, y: 0 }); // 操作菜单位置
+function handleMouseMove($event: MouseEvent | TouchEvent) {
+}
 
-function onNodeClick(node: Node, $event: MouseEvent | TouchEvent):boolean {
+function onNodeClick(node: Node, $event: MouseEvent | TouchEvent): boolean {
   const _base_position = myPage.value?.getBoundingClientRect();
   let x = 0, y = 0;
   if ("clientX" in $event) {
@@ -46,13 +47,13 @@ function onNodeClick(node: Node, $event: MouseEvent | TouchEvent):boolean {
   return true;
 }
 
-function onLineClick(line: RGLine, link: RGLink, e: MouseEvent | TouchEvent):boolean {
+function onLineClick(line: RGLine, link: RGLink, e: MouseEvent | TouchEvent): boolean {
   graphLineEditor.value?.showLineEditor(line, link);
   return true;
 }
 
 function closeMenu() {
-  graphNodeProfile.value.hideNodeProfile()
+  graphNodeProfile.value?.hideNodeProfile();
 }
 
 function buildShowData(graphData: RelationGraphData): RelationGraphData {
@@ -63,7 +64,7 @@ function buildShowData(graphData: RelationGraphData): RelationGraphData {
 
 onMounted(() => {
   const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
-  relationGraph.value?.getInstance()?.setDefaultJunctionPoint('border') // 连接点默认使用 边缘
+  relationGraph.value?.getInstance()?.setDefaultJunctionPoint("border"); // 连接点默认使用 边缘
   relationGraphDelegate.setRelationGraphView(relationGraph);
   store.dispatch("asyncSetRelationGraph", relationGraph);
   relationGraph.value?.setJsonData(graphJsonData, () => {

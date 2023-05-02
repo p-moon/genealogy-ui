@@ -1,23 +1,23 @@
 <template>
   <div class="common-layout">
-    <el-container>
+<!--    <el-container>-->
 <!--      <el-header>-->
 <!--        <HeaderMenu></HeaderMenu>-->
 <!--      </el-header>-->
-      <el-container>
+<!--      <el-container>-->
 <!--        <el-aside>-->
 <!--          <SideMenu></SideMenu>-->
 <!--        </el-aside>-->
-        <el-container>
-          <el-main>
+<!--        <el-container>-->
+<!--          <el-main>-->
             <router-view />
-          </el-main>
-          <el-footer>
-            <FooterMenu></FooterMenu>
-          </el-footer>
-        </el-container>
-      </el-container>
-    </el-container>
+<!--          </el-main>-->
+<!--          <el-footer>-->
+<!--            <FooterMenu></FooterMenu>-->
+<!--          </el-footer>-->
+<!--        </el-container>-->
+<!--      </el-container>-->
+<!--    </el-container>-->
   </div>
 </template>
 
@@ -28,7 +28,6 @@
   -moz-osx-font-smoothing grayscale
   text-align center
   color #2c3e50
-  margin-top 60px
 </style>
 <script>
 import HeaderMenu from "@/views/HeaderMenu";
