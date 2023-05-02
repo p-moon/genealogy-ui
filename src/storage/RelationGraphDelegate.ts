@@ -46,6 +46,7 @@ export let relationGraphDelegate: IRelationGraph = {
     node.id = String(new Date().getTime());
     store.dispatch("asyncAddNode", node).then(() => {
       relationGraphView?.value?.getInstance()?.addNodes([node]);
+      relationGraphView?.value?.getInstance()?.refresh();
     });
     return node;
   },
@@ -55,6 +56,7 @@ export let relationGraphDelegate: IRelationGraph = {
       from: line.from, to: line.to, text: line.text, color: "#43a2f1"
     }).then(() => {
       relationGraphView?.value?.getInstance()?.addLines([line]);
+      relationGraphView?.value?.getInstance()?.refresh()
     });
     return line;
   },
