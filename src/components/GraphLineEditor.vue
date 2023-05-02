@@ -75,23 +75,23 @@
                 inactive-text="不沿着连线走"
               />
             </el-form-item>
-            <el-form-item label="线条形状">
-              <el-select v-model="currentLine.lineShape" class="m-2" placeholder="Select" size="large">
-                <el-option
-                  v-for="item in [{label:'直线', value:1}, {label:'简洁', value:2},{label:'生动', value:3},{label:'折线', value:4},{label:'折线2', value:5},{label:'折线3', value:6}]"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
+<!--            <el-form-item label="线条形状">-->
+<!--              <el-select v-model="currentLine.lineShape" class="m-2" placeholder="Select" size="large">-->
+<!--                <el-option-->
+<!--                  v-for="item in [{label:'直线', value:1}, {label:'简洁', value:2},{label:'生动', value:3},{label:'折线', value:4},{label:'折线2', value:5},{label:'折线3', value:6}]"-->
+<!--                  :key="item.value"-->
+<!--                  :label="item.label"-->
+<!--                  :value="item.value"-->
+<!--                />-->
+<!--              </el-select>-->
+<!--            </el-form-item>-->
           </el-form>
         </div>
       </template>
       <template #footer>
         <div style="flex: auto">
-          <el-button @click="cancelClick">cancel</el-button>
-          <el-button type="primary" @click="confirmClick">confirm</el-button>
+<!--          <el-button @click="cancelClick">cancel</el-button>-->
+<!--          <el-button type="primary" @click="confirmClick">confirm</el-button>-->
         </div>
       </template>
     </el-drawer>

@@ -36,6 +36,9 @@ const relationGraphConfig: RGOptions = {
   useAnimationWhenRefresh: true,
   allowShowZoomMenu: true,
   placeSingleNode: true,
+  defaultLineColor:"#1465ce",
+  defaultNodeFontColor:"#000000",
+  defaultNodeBorderColor: "#decd16",
   layouts: [
     centerLayout,
     treeLayout,

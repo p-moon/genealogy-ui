@@ -2,7 +2,7 @@
   <div>
     <div class="c-my-node"
          style="background-image: url(/img/icon.png);border:#decd16 solid 1px;">
-      <div class="c-node-name" style="color:#6cc0ff">{{ node.text }}</div>
+      <div class="c-node-name" :style="{color: node.fontColor}">{{ node.text }}</div>
     </div>
   </div>
 </template>
