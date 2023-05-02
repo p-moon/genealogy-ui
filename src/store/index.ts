@@ -42,11 +42,7 @@ export const store = createStore<State>({
         {
           id: "a",
           text: "A",
-          borderColor: "rgba(0, 0, 0, 0)",
-          color: "rgba(0, 0, 0, 0)",
-          nodeShape: 1,
-          // width: 1,
-          // height: 1
+          nodeShape: 0,
         },
       ],
       lines: [

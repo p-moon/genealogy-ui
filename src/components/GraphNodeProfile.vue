@@ -69,7 +69,7 @@ export default defineComponent({
     }
 
     function addChildNode(): Node {
-      const newNode: Node = { id: "new-node", text: "new-node", nodeShape:1,borderColor: "rgba(0, 0, 0, 0)", color:"rgba(0, 0, 0, 0)", html:""};
+      const newNode: Node = { id: "new-node", text: "new-node"};
       relationGraphDelegate.addGraphNode(newNode);
       const line: Line = { from: currentNode.id, to: newNode.id, text: "节点关系描述" };
       relationGraphDelegate.addLine(line); // 添加当前节点到新增子节点的关系表示
@@ -78,7 +78,7 @@ export default defineComponent({
       return newNode;
     }
     function addParentNode(): Node {
-      const newNode: Node = { id: "new-node", text: "new-node", nodeShape:1, borderColor: "rgba(0, 0, 0, 0)", color:"rgba(0, 0, 0, 0)", html:""};
+      const newNode: Node = { id: "new-node", text: "new-node", nodeShape:0};
       relationGraphDelegate.addGraphNode(newNode);
       const line: Line = { from: newNode.id, to: currentNode.id, text: "节点关系描述" };
       relationGraphDelegate.addLine(line); // 添加当前节点到新增子节点的关系表示

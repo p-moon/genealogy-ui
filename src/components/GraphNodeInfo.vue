@@ -1,27 +1,28 @@
 <template>
   <div>
-<!--    <el-avatar shape="square" :size="50" src="/img/icons/WechatIMG12780.jpeg" />-->
-    <img src="/img/icons/WechatIMG12780.jpeg" alt="sss" style="width: 60px;height: 60px">
+    <div class="c-my-node"
+         style="background-image: url(/img/icon.png);border:#decd16 solid 1px;">
+      <div class="c-node-name" style="color:#6cc0ff">{{ node.text }}</div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import {defineComponent} from "vue";
+import { defineComponent } from "vue";
 import { Node } from "@/storage/model/Node";
 
 export default defineComponent({
   name: "GraphNodeInfo",
-  components: { },
+  components: {},
   props: {
     node: {
       type: Object as () => Node,
-      required: true,
-    },
+      required: true
+    }
   },
   setup() {
-    return {
-    };
-  },
+    return {};
+  }
 });
 </script>
 <style scoped>
@@ -32,5 +33,21 @@ export default defineComponent({
     box-shadow: 0 0 8px #cccccc;
     position: absolute;
     z-index: 999;
+}
+
+.c-my-node {
+    background-position: center center;
+    background-size: 100%;
+    border: #ff8c00 solid 1px;
+    height: 80px;
+    width: 80px;
+    border-radius: 42px;
+}
+
+.c-node-name {
+    width: 160px;
+    margin-left: -40px;
+    text-align: center;
+    margin-top: 85px;
 }
 </style>
