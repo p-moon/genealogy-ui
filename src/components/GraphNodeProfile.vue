@@ -25,15 +25,11 @@
           <el-slider v-model="currentNode.opacity" :step="1" :max="100"/>
         </el-form-item>
         <el-form-item label="头像">
-          <el-upload
-            class="avatar-uploader"
-            action="https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15"
-            :show-file-list="false"
-            v-model="currentNode.data!.avatar"
-          >
-            <img v-if="currentNode.data!.avatar" :src="currentNode.data!.avatar" class="avatar node-avatar"  alt=""/>
-            <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-          </el-upload>
+          <el-input v-model="currentNode.data!.avatar" placeholder="请输入图片地址">
+            <template #prepend>
+              <el-avatar shape="square" size="default" :src="currentNode.data!.avatar" />
+            </template>
+          </el-input>
         </el-form-item>
       </el-form>
     </div>
@@ -74,6 +70,7 @@ import { CircleCloseFilled, CirclePlusFilled, DeleteFilled, Edit,Plus } from "@e
 import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 import GraphNodeEditor from "@/components/GraphNodeEditor.vue";
 import { Ref } from "vue-property-decorator";
+import type { UploadProps,UploadFile, UploadFiles } from 'element-plus'
 
 export default defineComponent({
   name: "GraphNodeProfile",
@@ -99,7 +96,6 @@ export default defineComponent({
     function hideNodeProfile() {
       isShowNodeMenuPanel.value = false;
     }
-
     function deleteNode() {
       relationGraphDelegate.deleteNode(currentNode.value);
       hideNodeProfile();
@@ -165,5 +161,6 @@ export default defineComponent({
 }
 .node-avatar {
     width: 50px;
+    height: 50px;
 }
 </style>
