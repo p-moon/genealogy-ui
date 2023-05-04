@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="c-my-node"
-         :style="{ backgroundImage: `url(${node.data!.avatar || '/img/icon.png'})`, border: '#decd16 solid 1px' }">
+         :style="{ backgroundImage: `url(${node.data!.avatar})`, border: '#decd16 solid 1px' }">
       <div class="c-node-name" :style="{color: node.fontColor}">{{ node.text }}</div>
     </div>
   </div>

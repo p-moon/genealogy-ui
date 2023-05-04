@@ -15,14 +15,26 @@
         <el-form-item label="名称">
           <el-input v-model="currentNode.text" />
         </el-form-item>
+        <el-form-item label="颜色">
+          <el-color-picker v-model="currentNode.color" size="large" />
+          <div v-for="color in store.state.normal_color"
+               :key="color" @click="currentNode.color=color" :style="{ backgroundColor: color }"
+               style=" display: inline-block;width: 30px;height: 30px;margin: 1px;cursor: pointer;"></div>
+        </el-form-item>
         <el-form-item label="边框颜色">
           <el-color-picker v-model="currentNode.borderColor" size="large" />
+          <div v-for="color in store.state.normal_color"
+               :key="color" @click="currentNode.borderColor=color" :style="{ backgroundColor: color }"
+               style=" display: inline-block;width: 30px;height: 30px;margin: 1px;cursor: pointer;"></div>
         </el-form-item>
         <el-form-item label="字体颜色">
           <el-color-picker v-model="currentNode.fontColor" size="large" />
+          <div v-for="color in store.state.normal_color"
+               :key="color" @click="currentNode.fontColor=color" :style="{ backgroundColor: color }"
+               style=" display: inline-block;width: 30px;height: 30px;margin: 1px;cursor: pointer;"></div>
         </el-form-item>
         <el-form-item label="透明度">
-          <el-slider v-model="currentNode.opacity" :step="1" :max="100"/>
+          <el-slider v-model="currentNode.opacity" :step="1" :max="100" />
         </el-form-item>
         <el-form-item label="头像">
           <el-input v-model="currentNode.data!.avatar" placeholder="请输入图片地址">
@@ -38,7 +50,9 @@
       添加子节点
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item v-for="node in store.state.graph_json_data.nodes" @click.stop="addLine(currentNode, node)">{{node.text}}</el-dropdown-item>
+          <el-dropdown-item v-for="node in store.state.graph_json_data.nodes" @click.stop="addLine(currentNode, node)">
+            {{ node.text }}
+          </el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -47,7 +61,9 @@
       添加父节点
       <template #dropdown>
         <el-dropdown-menu>
-          <el-dropdown-item v-for="node in store.state.graph_json_data.nodes" @click.stop="addLine(node, currentNode)">{{node.text}}</el-dropdown-item>
+          <el-dropdown-item v-for="node in store.state.graph_json_data.nodes" @click.stop="addLine(node, currentNode)">
+            {{ node.text }}
+          </el-dropdown-item>
         </el-dropdown-menu>
       </template>
     </el-dropdown>
@@ -66,11 +82,11 @@ import { computed, defineComponent, onMounted, ref, watch, watchEffect } from "v
 import { Line } from "@/storage/model/Line";
 import { RelationGraphData, State, store } from "@/store";
 import { createDefaultNode, Node } from "@/storage/model/Node";
-import { CircleCloseFilled, CirclePlusFilled, DeleteFilled, Edit,Plus } from "@element-plus/icons-vue";
+import { CircleCloseFilled, CirclePlusFilled, DeleteFilled, Edit, Plus } from "@element-plus/icons-vue";
 import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 import GraphNodeEditor from "@/components/GraphNodeEditor.vue";
 import { Ref } from "vue-property-decorator";
-import type { UploadProps,UploadFile, UploadFiles } from 'element-plus'
+import type { UploadProps, UploadFile, UploadFiles } from "element-plus";
 
 export default defineComponent({
   name: "GraphNodeProfile",
@@ -86,6 +102,7 @@ export default defineComponent({
       nodeMenuPanelPosition.value.x = x;
       nodeMenuPanelPosition.value.y = y;
     }
+
     function showNodeProfile(node: Node, x: number, y: number) {
       isShowNodeMenuPanel.value = true;
       nodeMenuPanelPosition.value.x = x;
@@ -96,12 +113,13 @@ export default defineComponent({
     function hideNodeProfile() {
       isShowNodeMenuPanel.value = false;
     }
+
     function deleteNode() {
       relationGraphDelegate.deleteNode(currentNode.value);
       hideNodeProfile();
     }
 
-    function addLine(from:Node, to:Node) {
+    function addLine(from: Node, to: Node) {
       const line: Line = { from: from.id, to: to.id, text: "节点关系描述" };
       relationGraphDelegate.addLine(line); // 添加当前节点到新增子节点的关系表示
       hideNodeProfile();
@@ -114,6 +132,7 @@ export default defineComponent({
       // showEditorDrawer(newNode);
       return newNode;
     }
+
     function addParentNode(): Node {
       const newNode: Node = createDefaultNode();
       relationGraphDelegate.addGraphNode(newNode);
@@ -128,7 +147,7 @@ export default defineComponent({
 
     function showEditorDrawer(node: Node) {
       isShowNodeMenuPanel.value = false;
-      console.log("showNodeEditor", graphNodeEditor.value)
+      console.log("showNodeEditor", graphNodeEditor.value);
       graphNodeEditor.value?.showNodeEditor(node);
     }
 
@@ -145,9 +164,9 @@ export default defineComponent({
       hideNodeProfile,
       showNodeProfile,
       addLine,
-      modifyPanelPosition,
+      modifyPanelPosition
     };
-  },
+  }
 });
 </script>
 <style scoped>
@@ -159,6 +178,7 @@ export default defineComponent({
     position: absolute;
     z-index: 999;
 }
+
 .node-avatar {
     width: 50px;
     height: 50px;

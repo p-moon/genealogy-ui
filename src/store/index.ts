@@ -26,6 +26,7 @@ export interface RelationGraphData {
 
 // 为 store state 声明类型
 export interface State {
+  normal_color: string[],
   graph_json_data: RelationGraphData;
 }
 
@@ -34,6 +35,7 @@ export const key: InjectionKey<Store<State>> = Symbol();
 
 export const store = createStore<State>({
   state: {
+    normal_color: ["#FF4500", "#FFA500", "#FFFF00", "#00FF00", "#00BFFF", "#0000FF", "#8B00FF"],
     graph_json_data: {
       rootId: "a",
       nodes: [
@@ -43,8 +45,9 @@ export const store = createStore<State>({
           id: "a",
           text: "A",
           nodeShape: 0,
-          data: {avatar:"/img/icon.png"}
-        },
+          borderColor: "#FFFF00",
+          data: { avatar: "/img/icon.png" }
+        }
       ],
       lines: [
         // link配置选项：http://relation-graph.com/#/docs/link
