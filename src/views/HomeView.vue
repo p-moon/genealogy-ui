@@ -83,9 +83,8 @@ window.setInterval(() => {
 </script>
 <style scoped>
 .page-content {
-    margin-right: 300px;
     border: #efefef solid 1px;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 20px);
     width: 100%;
 }
 </style>
