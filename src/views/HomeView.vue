@@ -23,6 +23,7 @@ import { Node } from "@/storage/model/Node";
 import relationGraphConfig from "@/config/RelationGraphConfig";
 import GraphNodeProfile from "@/components/GraphNodeProfile.vue";
 import GraphNodeInfo from "@/components/GraphNodeInfo.vue";
+import RelationGraphMenu from "@/components/RelationGraphMenu.vue";
 import GraphLineEditor from "@/components/GraphLineEditor.vue";
 import { RGLine, RGLink } from "relation-graph/vue3/RelationGraph";
 import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";

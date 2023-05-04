@@ -43,6 +43,7 @@ export const store = createStore<State>({
           id: "a",
           text: "A",
           nodeShape: 0,
+          data: {avatar:"/img/icon.png"}
         },
       ],
       lines: [
