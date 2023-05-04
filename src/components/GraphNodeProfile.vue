@@ -16,22 +16,13 @@
           <el-input v-model="currentNode.text" />
         </el-form-item>
         <el-form-item label="颜色">
-          <el-color-picker v-model="currentNode.color" size="large" />
-          <div v-for="color in store.state.normal_color"
-               :key="color" @click="currentNode.color=color" :style="{ backgroundColor: color }"
-               style=" display: inline-block;width: 30px;height: 30px;margin: 1px;cursor: pointer;"></div>
+          <ColorPicker v-model="currentNode.color" :colors="store.state.normal_color"/>
         </el-form-item>
         <el-form-item label="边框颜色">
-          <el-color-picker v-model="currentNode.borderColor" size="large" />
-          <div v-for="color in store.state.normal_color"
-               :key="color" @click="currentNode.borderColor=color" :style="{ backgroundColor: color }"
-               style=" display: inline-block;width: 30px;height: 30px;margin: 1px;cursor: pointer;"></div>
+          <ColorPicker v-model="currentNode.borderColor" :colors="store.state.normal_color"/>
         </el-form-item>
         <el-form-item label="字体颜色">
-          <el-color-picker v-model="currentNode.fontColor" size="large" />
-          <div v-for="color in store.state.normal_color"
-               :key="color" @click="currentNode.fontColor=color" :style="{ backgroundColor: color }"
-               style=" display: inline-block;width: 30px;height: 30px;margin: 1px;cursor: pointer;"></div>
+          <ColorPicker v-model="currentNode.fontColor" :colors="store.state.normal_color"/>
         </el-form-item>
         <el-form-item label="透明度">
           <el-slider v-model="currentNode.opacity" :step="1" :max="100" />
@@ -87,10 +78,10 @@ import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 import GraphNodeEditor from "@/components/GraphNodeEditor.vue";
 import { Ref } from "vue-property-decorator";
 import type { UploadProps, UploadFile, UploadFiles } from "element-plus";
-
+import ColorPicker from "@/components/ColorPicker.vue";
 export default defineComponent({
   name: "GraphNodeProfile",
-  components: { GraphNodeEditor, Edit, CircleCloseFilled, DeleteFilled, CirclePlusFilled },
+  components: { GraphNodeEditor, Edit, CircleCloseFilled, DeleteFilled, CirclePlusFilled, ColorPicker},
 
   setup() {
     const isShowNodeMenuPanel = ref(false); // 是否展示操作菜单
