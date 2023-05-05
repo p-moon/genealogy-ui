@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div ref="myPage" class="page-content" @click="closeMenu" @mousemove="handleMouseMove">
+    <div ref="myPage" class="page-content" @click="closeMenu">
       <RelationGraph ref="relationGraph" :options="options" :onNodeClick="onNodeClick" :onLineClick="onLineClick">
         <template #node="{node}" v-slot="node">
           <GraphNodeInfo :node="node"></GraphNodeInfo>
@@ -35,29 +35,44 @@ const graphNodeProfile = ref<InstanceType<typeof GraphNodeProfile>>();
 
 const options = relationGraphConfig;
 
+const panelPosition = ref({ x: 0, y: 0 }); // 操作菜单位置
+
 function handleMouseMove($event: MouseEvent | TouchEvent) {
+
+}
+
+
+function updatePanelPosition($event: MouseEvent | TouchEvent) {
+  const _base_position = myPage.value?.getBoundingClientRect();
+  let x = 0, y= 0 ;
+  if($event instanceof MouseEvent) {
+    x = $event!.pageX;
+    y = $event!.pageY;
+  }
+  if($event instanceof TouchEvent) {
+    $event.preventDefault();
+    const touch:Touch = $event.touches[0];
+    x = touch!.pageX;
+    y = touch!.pageY;
+  }
+  panelPosition.value.x = x;
+  panelPosition.value.y = y;
 }
 
 function onNodeClick(node: Node, $event: MouseEvent | TouchEvent): boolean {
-  const _base_position = myPage.value?.getBoundingClientRect();
-  let x = 0, y = 0;
-  if ("clientX" in $event) {
-    x = $event?.clientX - _base_position.x;
-  }
-  if ("clientY" in $event) {
-    y = $event?.clientY - _base_position.y;
-  }
-  graphNodeProfile.value?.showNodeProfile(node, x, y);
+  updatePanelPosition($event)
+  graphNodeProfile.value?.showNodeProfile(node, panelPosition.value.x, panelPosition.value.y);
   return true;
 }
 
 function onLineClick(line: RGLine, link: RGLink, e: MouseEvent | TouchEvent): boolean {
-  graphLineEditor.value?.showLineEditor(line, link);
+  graphLineEditor.value?.showLineEditor(line, link, panelPosition.value.x, panelPosition.value.y);
   return true;
 }
 
 function closeMenu() {
   graphNodeProfile.value?.hideNodeProfile();
+  // graphLineEditor.value?.hideLineEditor();
 }
 
 function buildShowData(graphData: RelationGraphData): RelationGraphData {
@@ -68,7 +83,7 @@ function buildShowData(graphData: RelationGraphData): RelationGraphData {
 
 onMounted(() => {
   const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
-  relationGraph.value?.getInstance()?.setDefaultJunctionPoint("border"); // 连接点默认使用 边缘
+  relationGraph.value?.getInstance()!.setDefaultJunctionPoint("border"); // 连接点默认使用 边缘
   relationGraphDelegate.setRelationGraphView(relationGraph);
   store.dispatch("asyncSetRelationGraph", relationGraph);
   relationGraph.value?.setJsonData(graphJsonData, () => {
