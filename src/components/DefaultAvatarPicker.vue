@@ -33,9 +33,9 @@ export default defineComponent({
 
     const avatarGroups = computed(() => {
       const groups = [];
-      const groupSize = 5;
-      for (let i = 0; i < props.avatars.length; i += groupSize) {
-        groups.push(props.avatars.slice(i, i + groupSize));
+      const groupSize = 6;
+      for (let i = 0; i < props.avatars!.length; i += groupSize) {
+        groups.push(props.avatars!.slice(i, i + groupSize));
       }
       return groups;
     });

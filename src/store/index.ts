@@ -100,8 +100,8 @@ export const store = createStore<State>({
     asyncAddLine({ commit }, line: Line) {
       commit("addLine", line);
     },
-    asyncUpdateGraphData: ({ commit }, line: Line) => {
-      commit("updateGraphData", line);
+    asyncUpdateGraphData: ({ commit }, data: RelationGraphData) => {
+      commit("updateGraphData", data);
     }
   },
   modules: {}

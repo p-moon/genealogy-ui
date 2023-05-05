@@ -6,7 +6,9 @@ export interface NodeData {
   /**
    * 头像
    */
-  avatar:string
+  avatar:string;
+
+
 }
 
 /**

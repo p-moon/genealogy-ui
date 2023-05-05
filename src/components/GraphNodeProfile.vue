@@ -4,6 +4,37 @@
        v-bind:style="{left: nodeMenuPanelPosition.x + 'px',top: nodeMenuPanelPosition.y + 'px'}">
     <strong>对这个节点进行操作：</strong>
     <div>
+      <div>
+        <el-dropdown size="default" split-button type="primary" @click.stop="addChildNode">
+          添加子节点
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item v-for="node in store.state.graph_json_data.nodes" @click.stop="addLine(currentNode, node)">
+                {{ node.text }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        &nbsp;
+        <el-dropdown size="default" split-button type="primary" @click.stop="addParentNode">
+          添加父节点
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item v-for="node in store.state.graph_json_data.nodes" @click.stop="addLine(node, currentNode)">
+                {{ node.text }}
+              </el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+        &nbsp;
+        <el-button type="danger" @click.stop="deleteNode">
+          <el-icon>
+            <DeleteFilled />
+          </el-icon>
+          删除
+        </el-button>
+      </div>
+      <br>
       <el-form
         label-width="100px"
         :model="currentNode"
@@ -36,35 +67,6 @@
         </el-form-item>
       </el-form>
     </div>
-    &nbsp;
-    <el-dropdown size="default" split-button type="primary" @click.stop="addChildNode">
-      添加子节点
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item v-for="node in store.state.graph_json_data.nodes" @click.stop="addLine(currentNode, node)">
-            {{ node.text }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-    &nbsp;
-    <el-dropdown size="default" split-button type="primary" @click.stop="addParentNode">
-      添加父节点
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item v-for="node in store.state.graph_json_data.nodes" @click.stop="addLine(node, currentNode)">
-            {{ node.text }}
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-    &nbsp;
-    <el-button type="danger" @click.stop="deleteNode">
-      <el-icon>
-        <DeleteFilled />
-      </el-icon>
-      删除
-    </el-button>
   </div>
 </template>
 

@@ -1,11 +1,17 @@
-import { store } from "@/store";
+import { RelationGraphData, store } from "@/store";
 import { Line } from "@/storage/model/Line";
 import { Node } from "@/storage/model/Node";
 import { lineDexie } from "@/storage/dao/LineDexie";
 import { nodeDexie } from "@/storage/dao/NodeDexie";
 import RelationGraph from "relation-graph/vue3";
 import { Ref } from "vue";
+import { serialize, deserialize } from "class-transformer";
+import { RGJsonData } from "relation-graph/vue3/RelationGraph";
+import { ClassConstructor } from "class-transformer/types/interfaces";
 
+let relationGraphView: Ref<RelationGraph | undefined>;
+const localStorage: Storage = window.localStorage;
+const graphDataStorageKey: string = "GRAPH_DATA_STORAGE_KEY";
 
 interface IRelationGraph {
 
@@ -35,22 +41,26 @@ interface IRelationGraph {
   setRelationGraphView: (relationGraph: Ref<RelationGraph | undefined>) => void;
 
   /**
+   * 读取数据
+   */
+  getRelationGraphData: () => RelationGraphData;
+
+  /**
    * 保存绘图数据
    */
-  saveRelationGraph: () => void;
+  saveRelationGraphData: () => void;
 
   /**
    * 刷新重绘
    */
-  refresh:() => void;
+  refresh: () => void;
 
   /**
    * 将节点更新为选中状态
    */
-  focusNodeById: (id:string) => void;
+  focusNodeById: (id: string) => void;
 }
 
-let relationGraphView: Ref<RelationGraph | undefined>;
 export let relationGraphDelegate: IRelationGraph = {
   addGraphNode: (node: Node): Node => {
     node.id = String(new Date().getTime());
@@ -67,7 +77,7 @@ export let relationGraphDelegate: IRelationGraph = {
       from: line.from, to: line.to, text: line.text, color: "#43a2f1"
     }).then(() => {
       relationGraphView?.value?.getInstance()?.addLines([line]);
-      relationGraphView?.value?.getInstance()?.refresh()
+      relationGraphView?.value?.getInstance()?.refresh();
     });
     return line;
   },
@@ -85,7 +95,7 @@ export let relationGraphDelegate: IRelationGraph = {
   setRelationGraphView: (relationGraph: Ref<RelationGraph | undefined>) => {
     relationGraphView = relationGraph;
   },
-  saveRelationGraph: () => {
+  saveRelationGraphData: () => {
     let graphJsonData = relationGraphView.value?.getInstance().getGraphJsonData();
     if (!(graphJsonData && "lines" in graphJsonData && "nodes" in graphJsonData && "rootId" in graphJsonData)) {
       console.log("saveRelationGraph => invalid graphJsonData", graphJsonData);
@@ -93,14 +103,22 @@ export let relationGraphDelegate: IRelationGraph = {
     }
     console.log("saveRelationGraph => ", graphJsonData);
     store.dispatch("asyncUpdateGraphData", graphJsonData).then(r => {
-
+      localStorage.setItem(graphDataStorageKey, JSON.stringify(graphJsonData));
     });
   },
-  refresh:() => {
+  getRelationGraphData: (): RelationGraphData => {
+    const data = localStorage.getItem(graphDataStorageKey);
+    if(data == null) {
+      return store.state.graph_json_data;
+    }
+    return JSON.parse(data);
+  },
+
+  refresh: () => {
     relationGraphView.value?.getInstance().dataUpdated();
     relationGraphView.value?.getInstance().refresh();
   },
-  focusNodeById: (id:string) => {
+  focusNodeById: (id: string) => {
     relationGraphView.value?.getInstance().focusNodeById(id);
   }
 };

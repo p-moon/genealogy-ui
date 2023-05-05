@@ -83,18 +83,18 @@ function buildShowData(graphData: RelationGraphData): RelationGraphData {
 }
 
 onMounted(() => {
-  const graphJsonData: RGJsonData = buildShowData(store.state.graph_json_data);
+  const graphJsonData: RGJsonData = buildShowData(relationGraphDelegate.getRelationGraphData());
   relationGraph.value?.getInstance()!.setDefaultJunctionPoint("border"); // 连接点默认使用 边缘
   relationGraphDelegate.setRelationGraphView(relationGraph);
-  store.dispatch("asyncSetRelationGraph", relationGraph);
+  store.dispatch("asyncUpdateGraphData", graphJsonData);
   relationGraph.value?.setJsonData(graphJsonData, () => {
     console.log("relationGraph ready!");
   });
 });
 
 window.setInterval(() => {
-  relationGraphDelegate.saveRelationGraph();
-}, 3000);
+  relationGraphDelegate.saveRelationGraphData();
+}, 1000);
 
 </script>
 <style scoped>
