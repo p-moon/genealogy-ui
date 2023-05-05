@@ -28,11 +28,11 @@
           <el-slider v-model="currentNode.opacity" :step="1" :max="100" />
         </el-form-item>
         <el-form-item label="头像">
-          <el-input v-model="currentNode.data!.avatar" placeholder="请输入图片地址">
-            <template #prepend>
-              <el-avatar shape="square" size="default" :src="currentNode.data!.avatar" />
-            </template>
-          </el-input>
+          <div style="display: flex;align-items: center;margin-right: 10px;">
+            <img alt="" :src="currentNode.data!.avatar" style="width: 35px;height: 35px;border-radius: 5px;margin-right: 10px">
+            <el-input v-model="currentNode.data!.avatar" placeholder="请输入图片地址"></el-input>
+          </div>
+          <DefaultAvatarPicker v-model="currentNode.data!.avatar"></DefaultAvatarPicker>
         </el-form-item>
       </el-form>
     </div>
@@ -79,9 +79,10 @@ import GraphNodeEditor from "@/components/GraphNodeEditor.vue";
 import { Ref } from "vue-property-decorator";
 import type { UploadProps, UploadFile, UploadFiles } from "element-plus";
 import ColorPicker from "@/components/ColorPicker.vue";
+import DefaultAvatarPicker from "@/components/DefaultAvatarPicker.vue";
 export default defineComponent({
   name: "GraphNodeProfile",
-  components: { GraphNodeEditor, Edit, CircleCloseFilled, DeleteFilled, CirclePlusFilled, ColorPicker},
+  components: { DefaultAvatarPicker, GraphNodeEditor, Edit, CircleCloseFilled, DeleteFilled, CirclePlusFilled, ColorPicker},
 
   setup() {
     const isShowNodeMenuPanel = ref(false); // 是否展示操作菜单
