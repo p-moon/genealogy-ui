@@ -1,6 +1,6 @@
 <template>
   <div class="color-picker">
-    <el-color-picker v-model="selectedColor" size="large" />
+    <el-color-picker v-model="modelValue" size="large" />
     <div v-for="color in colors"
          :key="color"
          @click="selectColor(color)"
@@ -27,21 +27,12 @@ export default defineComponent({
   },
   emits: ['update:modelValue'],
   setup(props, { emit }) {
-    const selectedColor = ref(props.modelValue)
-
     function selectColor(color: string) {
-      selectedColor.value = color
       emit('update:modelValue', color)
     }
 
     return {
-      selectedColor,
       selectColor
-    }
-  },
-  watch: {
-    modelValue(newValue: string) {
-      this.selectedColor = newValue
     }
   }
 })

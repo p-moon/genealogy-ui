@@ -145,11 +145,11 @@ export default defineComponent({
     padding: 10px;
     background-color: #ffffff;
     border: #eeeeee solid 1px;
-    box-shadow: 0 0 8px #cccccc;
     position: absolute;
     z-index: 999;
     overflow-y: auto;
     height: 300px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04)
 }
 .panel-container {
     position: fixed;

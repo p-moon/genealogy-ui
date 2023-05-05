@@ -164,8 +164,8 @@ export default defineComponent({
 .node-menu-panel {
     padding: 10px;
     background-color: #ffffff;
-    border: #eeeeee solid 1px;
-    box-shadow: 0 0 8px #cccccc;
+    border: #bebcbc solid 1px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .12), 0 0 6px rgba(0, 0, 0, .04);
     position: absolute;
     z-index: 999;
     height: 300px;
