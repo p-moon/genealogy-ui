@@ -65,7 +65,8 @@ function onNodeClick(node: Node, $event: MouseEvent | TouchEvent): boolean {
   return true;
 }
 
-function onLineClick(line: RGLine, link: RGLink, e: MouseEvent | TouchEvent): boolean {
+function onLineClick(line: RGLine, link: RGLink, $event: MouseEvent | TouchEvent): boolean {
+  updatePanelPosition($event)
   graphLineEditor.value?.showLineEditor(line, link, panelPosition.value.x, panelPosition.value.y);
   return true;
 }
