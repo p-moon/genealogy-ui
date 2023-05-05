@@ -148,6 +148,8 @@ export default defineComponent({
     box-shadow: 0 0 8px #cccccc;
     position: absolute;
     z-index: 999;
+    overflow-y: auto;
+    height: 300px;
 }
 .panel-container {
     position: fixed;

@@ -168,6 +168,8 @@ export default defineComponent({
     box-shadow: 0 0 8px #cccccc;
     position: absolute;
     z-index: 999;
+    height: 300px;
+    overflow-y: auto;
 }
 
 .node-avatar {
