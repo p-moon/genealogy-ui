@@ -94,7 +94,7 @@ import { Line } from "@/storage/model/Line";
 import { store } from "@/store";
 import { mapGetters } from "vuex";
 import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
-import { RGLink } from "relation-graph/vue3/RelationGraph";
+import { RGLink } from "@/relation-graph/vue3/RelationGraph";
 import ColorPicker from "@/components/ColorPicker.vue";
 import { createDefaultNode, Node } from "@/storage/model/Node";
 

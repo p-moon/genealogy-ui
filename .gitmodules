@@ -1,0 +1,3 @@
+[submodule "relation-graph"]
+	path = src/relation-graph
+	url = git@github.com:p-moon/relation-graph.git

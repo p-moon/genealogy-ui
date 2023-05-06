@@ -1,4 +1,4 @@
-import type { RGNode } from 'relation-graph/vue3'
+import type { RGNode } from '@/relation-graph/vue3'
 
 const STAITC_MAP_ANGLE = 0
 export type SizeInfo = {

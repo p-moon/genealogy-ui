@@ -1,39 +1,52 @@
-import RGGraphMath from '../utils/RGGraphMath';
-import { devLog } from '../utils/RGCommon';
-import SeeksForceLayouter from './SeeksForceLayouter';
+import RGGraphMath from "../utils/RGGraphMath";
+import { devLog } from "../utils/RGCommon";
+import SeeksForceLayouter from "./SeeksForceLayouter";
 import type {
   RGCenterLayoutOptions,
   RGLayoutOptions,
   RGLayouter,
   RGNode,
-  RGOptionsFull,
-} from 'relation-graph/vue3';
-import type { NodesAnalyticResult } from '../utils/RGGraphMath';
+  RGOptionsFull
+} from "@/relation-graph/vue3";
+import type { NodesAnalyticResult } from "../utils/RGGraphMath";
+import { IGraphLayouter } from "@/common/layout/layouters/IGraphLayouter";
+import { Ref } from "vue";
+import RelationGraph from "@/relation-graph/vue3";
+import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 
 export class SeeksCenterLayouter
   extends SeeksForceLayouter
-  implements RGLayouter
-{
+  implements IGraphLayouter {
   constructor(layoutOptions: RGLayoutOptions, graphOptions: RGOptionsFull) {
     super(layoutOptions, graphOptions);
     this.layoutOptions = layoutOptions as RGCenterLayoutOptions;
   }
+
   // graphOptions: RGOptionsFull
   layoutOptions: RGCenterLayoutOptions;
   // rootNode: RGNode | undefined = undefined
   // allNodes: RGNode[] = []
   // __origin_nodes: RGNode[] = []
+
+  doBeforeLayout() {
+    const relationGraph = relationGraphDelegate.getRelationGraphView()?.value?.getInstance();
+    relationGraph?.setDefaultLineShape(1);
+    relationGraph?.setDefaultJunctionPoint("border");
+  }
+
+
   refresh() {
-    devLog('SeeksCenterLayouter:refresh');
+    devLog("SeeksCenterLayouter:refresh");
     this.placeNodes(this.__origin_nodes, this.rootNode);
   }
+
   placeNodes(allNodes: RGNode[], rootNode?: RGNode) {
-    devLog('SeeksCenterLayouter:placeNodes');
+    devLog("SeeksCenterLayouter:placeNodes");
     if (!rootNode) {
-      devLog('root is null:', rootNode);
+      devLog("root is null:", rootNode);
       return;
     }
-    devLog('layout by root:', rootNode);
+    devLog("layout by root:", rootNode);
     this.__origin_nodes = allNodes;
     this.rootNode = rootNode;
     allNodes.forEach((thisNode) => {
@@ -50,7 +63,7 @@ export class SeeksCenterLayouter
     const analyticResult: NodesAnalyticResult = {
       max_deep: 1,
       max_length: 1,
-      max_strength: 1,
+      max_strength: 1
     };
     RGGraphMath.analysisNodes4Didirectional(
       this.allNodes,
@@ -61,7 +74,7 @@ export class SeeksCenterLayouter
     );
     rootNode.lot.x = -(rootNode.el.offsetWidth || rootNode.width || 60) / 2;
     rootNode.lot.y = -(rootNode.el.offsetHeight || rootNode.height || 60) / 2;
-    devLog('root position:', rootNode.lot.x, rootNode.lot.y);
+    devLog("root position:", rootNode.lot.x, rootNode.lot.y);
     // this.rootNode.lot.x = 0
     // this.rootNode.lot.y = 0
     // if (this.rootNode.lot.y > 400) {
@@ -77,8 +90,9 @@ export class SeeksCenterLayouter
       thisNode.y = thisNode.lot.y! + __offsetY;
       thisNode.lot.placed = true;
     });
-    devLog('Start Auto Layout.....');
+    devLog("Start Auto Layout.....");
   }
+
   placeRelativePosition(rootNode: RGNode, analyticResult: NodesAnalyticResult) {
     const distance_coefficient =
       this.layoutOptions.distance_coefficient === undefined
@@ -87,12 +101,12 @@ export class SeeksCenterLayouter
     let __leve1_min_r =
       Math.round(
         ((this.graphOptions.viewSize.height +
-          this.graphOptions.viewSize.width) /
+            this.graphOptions.viewSize.width) /
           analyticResult.max_deep) *
-          0.2
+        0.2
       ) * distance_coefficient;
     devLog(
-      'analyticResult:',
+      "analyticResult:",
       analyticResult,
       __leve1_min_r,
       this.layoutOptions.distance_coefficient

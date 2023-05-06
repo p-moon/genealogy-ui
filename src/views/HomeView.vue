@@ -18,7 +18,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import RelationGraph, { RGJsonData } from "relation-graph/vue3";
+import RelationGraph, { RGJsonData } from "@/relation-graph/vue3";
 import {store } from "@/store";
 import { Node } from "@/storage/model/Node";
 import relationGraphConfig from "@/config/RelationGraphConfig";
@@ -26,7 +26,7 @@ import GraphNodeProfile from "@/components/GraphNodeProfile";
 import GraphNodeInfo from "@/components/GraphNodeInfo";
 import RelationGraphMenu from "@/components/RelationGraphMenu.vue";
 import GraphLineEditor from "@/components/GraphLineEditor";
-import { RGLine, RGLink } from "relation-graph/vue3/RelationGraph";
+import { RGLine, RGLink } from "@/relation-graph/vue3/RelationGraph";
 import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 import GraphMiniToolBar from "@/components/GraphMiniToolBar";
 

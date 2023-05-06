@@ -3,7 +3,7 @@ import {
   RGLayoutOptionsCore,
   RGOptions,
   RGTreeLayoutOptions
-} from "relation-graph/vue3/RelationGraph";
+} from "@/relation-graph/vue3/RelationGraph";
 
 const centerLayout: RGCenterLayoutOptions = {
   label: "中心",

@@ -367,7 +367,7 @@
 
 <script lang="ts" setup>
 import { inject, onMounted, ref } from 'vue'
-import RelationGraph, { RGJsonData, RGLayoutOptions } from "relation-graph/vue3";
+import RelationGraph, { RGJsonData, RGLayoutOptions } from "@/relation-graph/vue3";
 import { switchLayout } from "@/common/layout/RGLayouter"
 import { Edit,Document,ScaleToOriginal,DocumentAdd, RefreshRight, RefreshLeft } from "@element-plus/icons-vue";
 // import type { RGLayoutOptions} from '../../RelationGraph';

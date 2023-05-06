@@ -1,4 +1,4 @@
-import { JsonLine } from "relation-graph";
+import { JsonLine } from "@/relation-graph/vue3/RelationGraph";
 
 export interface LineData {
 

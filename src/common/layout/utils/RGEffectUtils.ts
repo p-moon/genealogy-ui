@@ -1,5 +1,5 @@
 import { devLog, isSupportTouch } from '../utils/RGCommon'
-import type { RGDragedCallback, RGDraggingCallback } from 'relation-graph/vue3'
+import type { RGDragedCallback, RGDraggingCallback } from '@/relation-graph/vue3'
 
 let __tmp_startPositionModel = { x: 0, y: 0 }
 const __tmp_startNodeInfo = { x: 0, y: 0 }

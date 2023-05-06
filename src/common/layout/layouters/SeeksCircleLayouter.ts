@@ -1,20 +1,24 @@
-import RGGraphMath from '../utils/RGGraphMath';
-import { devLog } from '../utils/RGCommon';
-import SeeksForceLayouter from './SeeksForceLayouter';
+import RGGraphMath from "../utils/RGGraphMath";
+import { devLog } from "../utils/RGCommon";
+import SeeksForceLayouter from "./SeeksForceLayouter";
 import type {
   RGLayoutOptions,
   RGLayouter,
   RGNode,
-  RGOptionsFull,
-} from 'relation-graph/vue3';
+  RGOptionsFull
+} from "@/relation-graph/vue3";
+import { IGraphLayouter } from "@/common/layout/layouters/IGraphLayouter";
+import { Ref } from "vue";
+import RelationGraph from "@/relation-graph/vue3";
+import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 
 export class SeeksCircleLayouter
   extends SeeksForceLayouter
-  implements RGLayouter
-{
+  implements IGraphLayouter {
   constructor(layoutOptions: RGLayoutOptions, graphOptions: RGOptionsFull) {
     super(layoutOptions, graphOptions);
   }
+
   // graphOptions: RGOptionsFull
   // layoutOptions: RGLayoutOptions
   // rootNode: RGNode | undefined = undefined
@@ -22,6 +26,14 @@ export class SeeksCircleLayouter
   // __origin_nodes: RGNode[] = []
   __max_deep = 1;
   __max_length = 1;
+
+
+  doBeforeLayout() {
+    const relationGraph = relationGraphDelegate.getRelationGraphView()?.value?.getInstance();
+    relationGraph?.setDefaultLineShape(1);
+    relationGraph?.setDefaultJunctionPoint("border");
+  }
+
   checkMaxDeepAndLength(thisLevelNodes: RGNode[], thisDeep: number) {
     if (thisLevelNodes.length > this.__max_length) {
       this.__max_length = thisLevelNodes.length;
@@ -32,7 +44,7 @@ export class SeeksCircleLayouter
     const __thisLOT_subling = {
       level: thisDeep,
       all_size: thisLevelNodes.length,
-      all_strength: 0,
+      all_strength: 0
     };
     const newLevelNodes: RGNode[] = [];
     thisLevelNodes.forEach((thisNode) => {
@@ -46,10 +58,10 @@ export class SeeksCircleLayouter
       let __thisNode_child_size = 0;
       if (thisNode.targetNodes) {
         thisNode.targetNodes.forEach((thisTarget) => {
-          devLog('child node::', thisTarget.type, thisTarget.lot.eached);
+          devLog("child node::", thisTarget.type, thisTarget.lot.eached);
           if (!thisTarget.lot) thisTarget.lot = { childs: [], eached: false };
           if (
-            thisTarget.type === 'node' &&
+            thisTarget.type === "node" &&
             thisTarget.targetNodes.length <= 1
           ) {
             if (!thisTarget.lot.eached) {
@@ -90,15 +102,17 @@ export class SeeksCircleLayouter
       this.checkMaxDeepAndLength(newLevelNodes, thisDeep + 1);
     }
   }
+
   refresh() {
     this.placeNodes(this.__origin_nodes, this.rootNode);
   }
+
   placeNodes(allNodes: RGNode[], rootNode?: RGNode) {
     if (!rootNode) {
-      devLog('root is null:', rootNode);
+      devLog("root is null:", rootNode);
       return;
     } else {
-      devLog('layout by root:', rootNode);
+      devLog("layout by root:", rootNode);
     }
     this.__origin_nodes = allNodes;
     this.rootNode = rootNode;
@@ -112,9 +126,9 @@ export class SeeksCircleLayouter
       thisNode.lot.strength = 0;
     });
     this.allNodes = allNodes;
-    devLog('max before:', this.__max_deep, this.__max_length);
+    devLog("max before:", this.__max_deep, this.__max_length);
     // this.checkMaxDeepAndLength([this.rootNode], 0);
-    devLog('max after:', this.__max_deep, this.__max_length);
+    devLog("max after:", this.__max_deep, this.__max_length);
     const __center = {
       x: 0,
       y: 0
@@ -134,7 +148,8 @@ export class SeeksCircleLayouter
       thisNode.x = _point.x;
       thisNode.y = _point.y;
     });
-    devLog('Start Auto Layout.....');
+    devLog("Start Auto Layout.....");
   }
 }
+
 export default SeeksCircleLayouter;

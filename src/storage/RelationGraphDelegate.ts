@@ -3,9 +3,9 @@ import { Line } from "@/storage/model/Line";
 import { Node } from "@/storage/model/Node";
 import { lineDexie } from "@/storage/dao/LineDexie";
 import { nodeDexie } from "@/storage/dao/NodeDexie";
-import RelationGraph from "relation-graph/vue3";
+import RelationGraph from "@/relation-graph/vue3";
 import { ref, Ref } from "vue";
-import { RGJsonData } from "relation-graph/vue3/RelationGraph";
+import { RGJsonData } from "@/relation-graph/vue3/RelationGraph";
 import { createDefaultRelationGraphData, RelationGraphData } from "@/storage/model/RelationGraphData";
 import { ElMessage, ElNotification } from "element-plus";
 
@@ -82,6 +82,7 @@ interface IRelationGraph {
    * 导入数据
    */
   importRelationGraphData: () => void;
+
 }
 
 class RelationGraphDelegate implements IRelationGraph {

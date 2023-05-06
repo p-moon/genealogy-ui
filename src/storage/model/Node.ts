@@ -1,4 +1,4 @@
-import { JsonNode } from "relation-graph";
+import { JsonNode } from "@/relation-graph/vue3/RelationGraph";
 import { ref } from "vue";
 
 export interface NodeData {
