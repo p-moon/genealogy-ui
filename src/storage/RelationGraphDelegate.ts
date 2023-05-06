@@ -4,13 +4,10 @@ import { Node } from "@/storage/model/Node";
 import { lineDexie } from "@/storage/dao/LineDexie";
 import { nodeDexie } from "@/storage/dao/NodeDexie";
 import RelationGraph from "relation-graph/vue3";
-import { Ref } from "vue";
+import { ref, Ref } from "vue";
 import { RGJsonData } from "relation-graph/vue3/RelationGraph";
 import { createDefaultRelationGraphData, RelationGraphData } from "@/storage/model/RelationGraphData";
 
-let relationGraphView: Ref<RelationGraph | undefined>;
-const localStorage: Storage = window.localStorage;
-const graphDataStorageKey: string = "GRAPH_DATA_STORAGE_KEY";
 
 interface IRelationGraph {
 
@@ -37,7 +34,7 @@ interface IRelationGraph {
   /**
    * 写入UI实例
    */
-  setRelationGraphView: (relationGraph: Ref<RelationGraph | undefined>) => void;
+  setRelationGraphView: (relationGraph: Ref<RelationGraph>) => void;
 
   /**
    * 读取UI实例
@@ -75,80 +72,97 @@ interface IRelationGraph {
   createNewRelationGraphFromStorage:() => void;
 }
 
-export let relationGraphDelegate: IRelationGraph = {
-  addGraphNode: (node: Node): Node => {
+class RelationGraphDelegate implements IRelationGraph {
+
+  private _relationGraphView: Ref<RelationGraph|undefined> = ref<RelationGraph>();
+  private localStorage: Storage = window.localStorage;
+  private graphDataStorageKey: string = "GRAPH_DATA_STORAGE_KEY";
+
+  addGraphNode(node: Node): Node {
     node.id = String(new Date().getTime());
     store.dispatch("asyncAddNode", node).then(() => {
-      relationGraphView?.value?.getInstance()?.addNodes([node]);
-      relationGraphView?.value?.getInstance()?.refresh();
-      // relationGraphView?.value?.getInstance()?.focusNodeById(node.id);
+      this._relationGraphView?.value?.getInstance()?.addNodes([node]);
+      this._relationGraphView?.value?.getInstance()?.refresh();
+      this.focusNodeById(node.id);
     });
     return node;
-  },
-  addLine: (line: Line): Line => {
+  }
+
+  addLine(line: Line): Line {
     // lineDexie.nodes.add(line);
     store.dispatch("asyncAddLine", {
       from: line.from, to: line.to, text: line.text, color: "#43a2f1"
     }).then(() => {
-      relationGraphView?.value?.getInstance()?.addLines([line]);
-      relationGraphView?.value?.getInstance()?.refresh();
+      this._relationGraphView?.value?.getInstance()?.addLines([line]);
+      this._relationGraphView?.value?.getInstance()?.refresh();
     });
     return line;
-  },
-  deleteNode: (node: Node) => {
-    relationGraphView?.value?.getInstance()?.removeNodeById(node.id);
-    relationGraphView?.value?.getInstance()?.refresh();
-    store.dispatch("asyncDeleteNode", node).then(() => {});
-  },
-  deleteLine: (line: Line) => {
+  }
+
+  createNewRelationGraph(): void {
+    let graph_data = createDefaultRelationGraphData();
+    this._relationGraphView?.value?.setJsonData(graph_data);
+    store.dispatch("asyncUpdateGraphData", graph_data).then(r => {
+      this.localStorage.setItem(this.graphDataStorageKey, JSON.stringify(graph_data));
+    });
+  }
+
+  createNewRelationGraphFromStorage(): void {
+    let graph_data = relationGraphDelegate.getRelationGraphData();
+    this._relationGraphView?.value?.setJsonData(graph_data);
+    store.dispatch("asyncUpdateGraphData", graph_data).then(r => {
+      this.localStorage.setItem(this.graphDataStorageKey, JSON.stringify(graph_data));
+    });
+  }
+
+  deleteLine(line: Line): void {
     store.dispatch("asyncDeleteLine", line).then(() => {
-      relationGraphView?.value?.getInstance()?.removeLinkById(line.from, line.to);
+      this._relationGraphView?.value?.getInstance()?.removeLinkById(line.from, line.to);
     });
-  },
-  setRelationGraphView: (relationGraph: Ref<RelationGraph | undefined>) => {
-    relationGraphView = relationGraph;
-  },
-  getRelationGraphView:  (): Ref<RelationGraph | undefined> => {
-    return relationGraphView;
-  },
-  saveRelationGraphData: () => {
-    let graphJsonData = relationGraphView.value?.getInstance().getGraphJsonData();
-    if (!(graphJsonData && "lines" in graphJsonData && "nodes" in graphJsonData && "rootId" in graphJsonData)) {
-      console.log("saveRelationGraph => invalid graphJsonData", graphJsonData);
-      return;
-    }
-    console.log("saveRelationGraph => ", graphJsonData);
-    store.dispatch("asyncUpdateGraphData", graphJsonData).then(r => {
-      localStorage.setItem(graphDataStorageKey, JSON.stringify(graphJsonData));
-    });
-  },
-  getRelationGraphData: (): RelationGraphData => {
-    const data = localStorage.getItem(graphDataStorageKey);
+  }
+
+  deleteNode(node: Node): void {
+    this._relationGraphView?.value?.getInstance()?.removeNodeById(node.id);
+    this._relationGraphView?.value?.getInstance()?.refresh();
+    store.dispatch("asyncDeleteNode", node).then(() => {});
+  }
+
+  focusNodeById(id: string): void {
+    this._relationGraphView?.value?.getInstance().focusNodeById(id);
+  }
+
+  getRelationGraphData(): RelationGraphData {
+    const data = this.localStorage.getItem(this.graphDataStorageKey);
     if(data == null) {
       return store.state.graph_json_data;
     }
     return JSON.parse(data);
-  },
+  }
 
-  refresh: () => {
-    relationGraphView.value?.getInstance().dataUpdated();
-    relationGraphView.value?.getInstance().refresh();
-  },
-  focusNodeById: (id: string) => {
-    relationGraphView.value?.getInstance().focusNodeById(id);
-  },
-  createNewRelationGraph:() => {
-    let graph_data = createDefaultRelationGraphData();
-    relationGraphView.value?.setJsonData(graph_data);
-    store.dispatch("asyncUpdateGraphData", graph_data).then(r => {
-      localStorage.setItem(graphDataStorageKey, JSON.stringify(graph_data));
-    });
-  },
-  createNewRelationGraphFromStorage:() => {
-    let graph_data = relationGraphDelegate.getRelationGraphData();
-    relationGraphView.value?.setJsonData(graph_data);
-    store.dispatch("asyncUpdateGraphData", graph_data).then(r => {
-      localStorage.setItem(graphDataStorageKey, JSON.stringify(graph_data));
+  getRelationGraphView(): Ref<RelationGraph | undefined> {
+    return this._relationGraphView;
+  }
+
+  refresh(): void {
+    this._relationGraphView?.value?.getInstance().dataUpdated();
+    this._relationGraphView?.value?.getInstance().refresh();
+  }
+
+  saveRelationGraphData(): void {
+    let graphJsonData = this._relationGraphView?.value?.getInstance().getGraphJsonData();
+    if (!(graphJsonData && "lines" in graphJsonData && "nodes" in graphJsonData && "rootId" in graphJsonData)) {
+      console.log("saveRelationGraph => invalid graphJsonData", graphJsonData);
+      return;
+    }
+    store.dispatch("asyncUpdateGraphData", graphJsonData).then(r => {
+      this.localStorage.setItem(this.graphDataStorageKey, JSON.stringify(graphJsonData));
     });
   }
-};
+
+  setRelationGraphView(relationGraph: Ref<RelationGraph|undefined>): void {
+    this._relationGraphView = relationGraph;
+  }
+
+}
+
+export const relationGraphDelegate:RelationGraphDelegate = new RelationGraphDelegate();

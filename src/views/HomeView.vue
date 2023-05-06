@@ -19,7 +19,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 import RelationGraph, { RGJsonData } from "relation-graph/vue3";
-import { RelationGraphData, store } from "@/store";
+import {store } from "@/store";
 import { Node } from "@/storage/model/Node";
 import relationGraphConfig from "@/config/RelationGraphConfig";
 import GraphNodeProfile from "@/components/GraphNodeProfile";
@@ -31,7 +31,7 @@ import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 import GraphMiniToolBar from "@/components/GraphMiniToolBar";
 
 const myPage = ref<HTMLElement>();
-const relationGraph = ref<RelationGraph>();
+const relationGraph = ref<RelationGraph|undefined>();
 const graphLineEditor = ref<InstanceType<typeof GraphLineEditor>>();
 const graphNodeProfile = ref<InstanceType<typeof GraphNodeProfile>>();
 
@@ -85,7 +85,7 @@ onMounted(() => {
 
 window.setInterval(() => {
   relationGraphDelegate.saveRelationGraphData();
-}, 4000);
+}, 30000);
 
 </script>
 <style scoped>
