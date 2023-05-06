@@ -5,9 +5,9 @@
         <template #node="{node}" v-slot="node">
           <GraphNodeInfo :node="node"></GraphNodeInfo>
         </template>
-<!--        <template #miniToolBar v-slot="miniToolBar">-->
-<!--          <GraphMiniToolBar />-->
-<!--        </template>-->
+        <template #miniToolBar v-slot="miniToolBar">
+          <GraphMiniToolBar></GraphMiniToolBar>
+        </template>
       </RelationGraph>
     </div>
     <GraphNodeProfile ref="graphNodeProfile"></GraphNodeProfile>
@@ -21,12 +21,13 @@ import RelationGraph, { RGJsonData } from "relation-graph/vue3";
 import { RelationGraphData, store } from "@/store";
 import { Node } from "@/storage/model/Node";
 import relationGraphConfig from "@/config/RelationGraphConfig";
-import GraphNodeProfile from "@/components/GraphNodeProfile.vue";
-import GraphNodeInfo from "@/components/GraphNodeInfo.vue";
+import GraphNodeProfile from "@/components/GraphNodeProfile";
+import GraphNodeInfo from "@/components/GraphNodeInfo";
 import RelationGraphMenu from "@/components/RelationGraphMenu.vue";
-import GraphLineEditor from "@/components/GraphLineEditor.vue";
+import GraphLineEditor from "@/components/GraphLineEditor";
 import { RGLine, RGLink } from "relation-graph/vue3/RelationGraph";
 import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
+import GraphMiniToolBar from "@/components/GraphMiniToolBar";
 
 const myPage = ref<HTMLElement>();
 const relationGraph = ref<RelationGraph>();

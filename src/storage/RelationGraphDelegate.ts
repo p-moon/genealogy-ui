@@ -41,6 +41,11 @@ interface IRelationGraph {
   setRelationGraphView: (relationGraph: Ref<RelationGraph | undefined>) => void;
 
   /**
+   * 读取UI实例
+   */
+  getRelationGraphView:  () => Ref<RelationGraph | undefined>;
+
+  /**
    * 读取数据
    */
   getRelationGraphData: () => RelationGraphData;
@@ -82,10 +87,9 @@ export let relationGraphDelegate: IRelationGraph = {
     return line;
   },
   deleteNode: (node: Node) => {
-    node.isHide = true;
-    store.dispatch("asyncDeleteNode", node).then(() => {
-      // relationGraphView?.value?.getInstance()?.removeNodeById(node.id);
-    });
+    relationGraphView?.value?.getInstance()?.removeNodeById(node.id);
+    relationGraphView?.value?.getInstance()?.refresh();
+    store.dispatch("asyncDeleteNode", node).then(() => {});
   },
   deleteLine: (line: Line) => {
     store.dispatch("asyncDeleteLine", line).then(() => {
@@ -94,6 +98,9 @@ export let relationGraphDelegate: IRelationGraph = {
   },
   setRelationGraphView: (relationGraph: Ref<RelationGraph | undefined>) => {
     relationGraphView = relationGraph;
+  },
+  getRelationGraphView:  (): Ref<RelationGraph | undefined> => {
+    return relationGraphView;
   },
   saveRelationGraphData: () => {
     let graphJsonData = relationGraphView.value?.getInstance().getGraphJsonData();
