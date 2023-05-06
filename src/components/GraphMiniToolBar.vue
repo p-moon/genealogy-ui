@@ -16,8 +16,8 @@
       <span class="c-mb-text">文件</span>
       <div
         :style="{
-          width: downloadPanelWidth + 'px',
-          'margin-left': downloadPanelWidth * -1 + 'px',
+          width: downloadPanelWidth * 2 + 'px',
+          'margin-left': downloadPanelWidth * 2 * -1 + 'px',
         }"
         class="c-mb-child-panel"
       >
@@ -34,12 +34,32 @@
         <div
           class="c-mb-button c-mb-button-c"
           style="width: 50px"
-          @click="relationGraphDelegate.saveRelationGraphData();"
+          @click="saveRelationGraphData"
         >
           <el-icon class="rg-icon">
             <Document />
           </el-icon>
           <span class="c-mb-text">保存</span>
+        </div>
+        <div
+          class="c-mb-button c-mb-button-c"
+          style="width: 50px"
+          @click="relationGraphDelegate.exportRelationGraphData();"
+        >
+          <el-icon class="rg-icon">
+            <RefreshRight />
+          </el-icon>
+          <span class="c-mb-text">导出</span>
+        </div>
+        <div
+          class="c-mb-button c-mb-button-c"
+          style="width: 50px"
+          @click="relationGraphDelegate.importRelationGraphData();"
+        >
+          <el-icon class="rg-icon">
+            <RefreshLeft />
+          </el-icon>
+          <span class="c-mb-text">导入</span>
         </div>
       </div>
     </div>
@@ -349,9 +369,10 @@
 import { inject, onMounted, ref } from 'vue'
 import RelationGraph, { RGJsonData, RGLayoutOptions } from "relation-graph/vue3";
 import { switchLayout } from "@/common/layout/RGLayouter"
-import { Edit,Document,ScaleToOriginal,DocumentAdd } from "@element-plus/icons-vue";
+import { Edit,Document,ScaleToOriginal,DocumentAdd, RefreshRight, RefreshLeft } from "@element-plus/icons-vue";
 // import type { RGLayoutOptions} from '../../RelationGraph';
 import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
+import { ElNotification } from "element-plus";
 const relationGraph = relationGraphDelegate.getRelationGraphView()?.value?.getInstance();
 
 const height = ref(275)
@@ -372,6 +393,12 @@ const onLayoutChanged = (layoutConfig: RGLayoutOptions) => {
 const toggleAutoLayout = () => {
   relationGraph!.startAutoLayout()
 }
+
+const saveRelationGraphData = () => {
+  relationGraphDelegate.saveRelationGraphData();
+  ElNotification({ title: 'Success', message: '数据保存成功', type: 'success', })
+}
+
 const printGraphJsonData = () => {
   hits.value++
   setTimeout(() => {

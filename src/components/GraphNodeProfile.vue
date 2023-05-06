@@ -73,7 +73,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, ref, watch, watchEffect } from "vue";
 import { Line } from "@/storage/model/Line";
-import { RelationGraphData, State, store } from "@/store";
+import {State, store } from "@/store";
 import { createDefaultNode, Node } from "@/storage/model/Node";
 import { CircleCloseFilled, CirclePlusFilled, DeleteFilled, Edit, Plus } from "@element-plus/icons-vue";
 import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
