@@ -5,24 +5,8 @@ import { InjectionKey } from "vue";
 import { createStore, Store } from "vuex";
 import { Node } from "@/storage/model/Node";
 import { Line } from "@/storage/model/Line";
+import { RelationGraphData, createDefaultRelationGraphData } from "@/storage/model/RelationGraphData";
 
-export interface RelationGraphData {
-
-  /**
-   * 跟id
-   */
-  rootId: string;
-
-  /**
-   * 节点列表
-   */
-  nodes: Node[];
-
-  /**
-   * 节点关系列表
-   */
-  lines: Line[];
-}
 
 // 为 store state 声明类型
 export interface State {
@@ -36,23 +20,7 @@ export const key: InjectionKey<Store<State>> = Symbol();
 export const store = createStore<State>({
   state: {
     normal_color: ["#FF4500", "#FFA500", "#FFFF00", "#00FF00", "#00BFFF", "#0000FF", "#8B00FF"],
-    graph_json_data: {
-      rootId: "a",
-      nodes: [
-        // node配置选项：http://relation-graph.com/#/docs/node
-        // node支持通过插槽slot完全自定义，示例：http://relation-graph.com/#/demo/adv-slot
-        {
-          id: "a",
-          text: "A",
-          nodeShape: 0,
-          borderColor: "#FFFF00",
-          data: { avatar: "/img/icon.png" }
-        }
-      ],
-      lines: [
-        // link配置选项：http://relation-graph.com/#/docs/link
-      ]
-    }
+    graph_json_data: createDefaultRelationGraphData(),
   },
   getters: {
     getNodeList(state: State): Node[] {

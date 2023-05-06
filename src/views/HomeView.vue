@@ -1,6 +1,7 @@
 <template>
   <div>
     <div ref="myPage" class="page-content" @click="closeMenu">
+      <RelationGraphMenu></RelationGraphMenu>
       <RelationGraph ref="relationGraph" :options="options" :onNodeClick="onNodeClick" :onLineClick="onLineClick">
         <template #node="{node}" v-slot="node">
           <GraphNodeInfo :node="node"></GraphNodeInfo>
@@ -74,28 +75,17 @@ function onLineClick(line: RGLine, link: RGLink, $event: MouseEvent | TouchEvent
 
 function closeMenu() {
   graphNodeProfile.value?.hideNodeProfile();
-  // graphLineEditor.value?.hideLineEditor();
-}
-
-function buildShowData(graphData: RelationGraphData): RelationGraphData {
-  graphData.nodes.forEach((node: Node) => {
-  });
-  return graphData;
 }
 
 onMounted(() => {
-  const graphJsonData: RGJsonData = buildShowData(relationGraphDelegate.getRelationGraphData());
   relationGraph.value?.getInstance()!.setDefaultJunctionPoint("border"); // 连接点默认使用 边缘
   relationGraphDelegate.setRelationGraphView(relationGraph);
-  store.dispatch("asyncUpdateGraphData", graphJsonData);
-  relationGraph.value?.setJsonData(graphJsonData, () => {
-    console.log("relationGraph ready!");
-  });
+  relationGraphDelegate.createNewRelationGraphFromStorage();
 });
 
 window.setInterval(() => {
   relationGraphDelegate.saveRelationGraphData();
-}, 1000);
+}, 4000);
 
 </script>
 <style scoped>

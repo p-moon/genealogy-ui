@@ -1,13 +1,12 @@
-import { RelationGraphData, store } from "@/store";
+import {store } from "@/store";
 import { Line } from "@/storage/model/Line";
 import { Node } from "@/storage/model/Node";
 import { lineDexie } from "@/storage/dao/LineDexie";
 import { nodeDexie } from "@/storage/dao/NodeDexie";
 import RelationGraph from "relation-graph/vue3";
 import { Ref } from "vue";
-import { serialize, deserialize } from "class-transformer";
 import { RGJsonData } from "relation-graph/vue3/RelationGraph";
-import { ClassConstructor } from "class-transformer/types/interfaces";
+import { createDefaultRelationGraphData, RelationGraphData } from "@/storage/model/RelationGraphData";
 
 let relationGraphView: Ref<RelationGraph | undefined>;
 const localStorage: Storage = window.localStorage;
@@ -64,6 +63,16 @@ interface IRelationGraph {
    * 将节点更新为选中状态
    */
   focusNodeById: (id: string) => void;
+
+  /**
+   * 清空画板，彻底开启一个新的绘图
+   */
+  createNewRelationGraph: () => void;
+
+  /**
+   * 从存储中载入输入并创建画板
+   */
+  createNewRelationGraphFromStorage:() => void;
 }
 
 export let relationGraphDelegate: IRelationGraph = {
@@ -127,5 +136,19 @@ export let relationGraphDelegate: IRelationGraph = {
   },
   focusNodeById: (id: string) => {
     relationGraphView.value?.getInstance().focusNodeById(id);
+  },
+  createNewRelationGraph:() => {
+    let graph_data = createDefaultRelationGraphData();
+    relationGraphView.value?.setJsonData(graph_data);
+    store.dispatch("asyncUpdateGraphData", graph_data).then(r => {
+      localStorage.setItem(graphDataStorageKey, JSON.stringify(graph_data));
+    });
+  },
+  createNewRelationGraphFromStorage:() => {
+    let graph_data = relationGraphDelegate.getRelationGraphData();
+    relationGraphView.value?.setJsonData(graph_data);
+    store.dispatch("asyncUpdateGraphData", graph_data).then(r => {
+      localStorage.setItem(graphDataStorageKey, JSON.stringify(graph_data));
+    });
   }
 };

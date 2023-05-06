@@ -7,6 +7,45 @@
     class="c-mini-toolbar"
   >
     <div
+      v-if="relationGraph!.options!.allowShowDownloadButton"
+      class="c-mb-button"
+    >
+      <el-icon class="rg-icon">
+        <Document />
+      </el-icon>
+      <span class="c-mb-text">文件</span>
+      <div
+        :style="{
+          width: downloadPanelWidth + 'px',
+          'margin-left': downloadPanelWidth * -1 + 'px',
+        }"
+        class="c-mb-child-panel"
+      >
+        <div
+          class="c-mb-button c-mb-button-c"
+          style="width: 50px"
+          @click="relationGraphDelegate.createNewRelationGraph();"
+        >
+          <el-icon class="rg-icon">
+            <DocumentAdd />
+          </el-icon>
+          <span class="c-mb-text">新建</span>
+        </div>
+        <div
+          class="c-mb-button c-mb-button-c"
+          style="width: 50px"
+          @click="relationGraphDelegate.saveRelationGraphData();"
+        >
+          <el-icon class="rg-icon">
+            <Document />
+          </el-icon>
+          <span class="c-mb-text">保存</span>
+        </div>
+      </div>
+    </div>
+
+
+    <div
       class="c-mb-button"
       style="margin-top: 0px"
       @click="relationGraph!.fullscreen()"
@@ -310,7 +349,7 @@
 import { inject, onMounted, ref } from 'vue'
 import RelationGraph, { RGJsonData, RGLayoutOptions } from "relation-graph/vue3";
 import { switchLayout } from "@/common/layout/RGLayouter"
-
+import { Edit,Document,ScaleToOriginal,DocumentAdd } from "@element-plus/icons-vue";
 // import type { RGLayoutOptions} from '../../RelationGraph';
 import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 const relationGraph = relationGraphDelegate.getRelationGraphView()?.value?.getInstance();
