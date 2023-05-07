@@ -1,0 +1,2 @@
+"use strict";(self["webpackChunkgenealogy_ui"]=self["webpackChunkgenealogy_ui"]||[]).push([[443],{7753:function(n,e,u){u.r(e),u.d(e,{default:function(){return f}});var a=u(9812);const t={class:"about"},r=(0,a._)("h1",null,"This is an about page",-1),s=[r];function i(n,e){return(0,a.wg)(),(0,a.iD)("div",t,s)}var c=u(8998);const o={},l=(0,c.Z)(o,[["render",i]]);var f=l}}]);
+//# sourceMappingURL=about.85440975.js.map
