@@ -24,6 +24,18 @@ const forceLayout: RGLayoutOptionsCore = {
   layoutClassName: "seeks-layout-center"
 };
 
+const circleLayout: RGLayoutOptionsCore = {
+  label: "圆形",
+  layoutName: "circle",
+  layoutClassName: "seeks-layout-circle"
+};
+
+const fixedLayout: RGLayoutOptionsCore = {
+  label: "fixed",
+  layoutName: "fixed",
+  layoutClassName: "seeks-layout-fixed"
+};
+
 const relationGraphConfig: RGOptions = {
   allowSwitchLineShape: true,
   allowSwitchJunctionPoint: true,
@@ -39,10 +51,14 @@ const relationGraphConfig: RGOptions = {
   defaultLineColor:"#1465ce",
   defaultNodeFontColor:"#000000",
   defaultNodeBorderColor: "#decd16",
+  // isMoveByParentNode: true,
+  // allowShowDownloadButton: false,
   layouts: [
     centerLayout,
     treeLayout,
     forceLayout,
+    circleLayout,
+    fixedLayout,
   ]
 };
 

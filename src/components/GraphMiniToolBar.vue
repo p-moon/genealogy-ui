@@ -343,7 +343,7 @@
         <div
           class="c-mb-button c-mb-button-c"
           style="width: 50px"
-          @click="relationGraph!.downloadAsImage('png')"
+          @click="relationGraph?.downloadAsImage('sss', 'png')"
         >
           <svg class="rg-icon" aria-hidden="true">
             <use xlink:href="#icon-tupian" />
@@ -353,7 +353,7 @@
         <div
           class="c-mb-button c-mb-button-c"
           style="width: 50px"
-          @click="relationGraph!.downloadAsImage('jpg')"
+          @click="relationGraph?.downloadAsImage('graph', 'jpg')"
         >
           <svg class="rg-icon" aria-hidden="true">
             <use xlink:href="#icon-tupian" />
@@ -373,7 +373,7 @@ import { Edit,Document,ScaleToOriginal,DocumentAdd, RefreshRight, RefreshLeft } 
 // import type { RGLayoutOptions} from '../../RelationGraph';
 import { relationGraphDelegate } from "@/storage/RelationGraphDelegate";
 import { ElNotification } from "element-plus";
-const relationGraph = relationGraphDelegate.getRelationGraphView()?.value?.getInstance();
+const relationGraph = relationGraphDelegate.getRelationGraphView().value?.getInstance();
 
 const height = ref(275)
 const hits = ref(0)

@@ -37,6 +37,8 @@
     "tests/**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/relation-graph/relation-graph-vue3",
+    "src/relation-graph/typings"
   ]
 }
